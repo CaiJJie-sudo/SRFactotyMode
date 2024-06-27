@@ -8,7 +8,7 @@
 
 
     <Toolbar
-        android:id="@+id/bar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/black">
@@ -25,7 +25,7 @@
     </Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/single_test"
+        android:id="@+id/recyv_single_test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

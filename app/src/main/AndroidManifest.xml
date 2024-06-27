@@ -13,6 +13,8 @@
         android:theme="@style/Theme.SRFactoryMode"
         tools:targetApi="31">
         <activity android:name=".SingleTestActivity"/>
+        <activity android:name=".singletest.BatteryTestActivity"/>
+        <activity android:name=".singletest.VibrationTestActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

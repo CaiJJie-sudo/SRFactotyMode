@@ -1,0 +1,455 @@
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 46e161e..b94a0c7 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -13,6 +13,8 @@
+         android:theme="@style/Theme.SRFactoryMode"
+         tools:targetApi="31">
+         <activity android:name=".SingleTestActivity"/>
++        <activity android:name=".singletest.BatteryTestActivity"/>
++        <activity android:name=".singletest.VibrationTestActivity"/>
+         <activity
+             android:name=".MainActivity"
+             android:exported="true">
+diff --git a/app/src/main/res/layout/activity_battery_test.xml b/app/src/main/res/layout/activity_battery_test.xml
+index 575dc57..eb11e44 100644
+--- a/app/src/main/res/layout/activity_battery_test.xml
++++ b/app/src/main/res/layout/activity_battery_test.xml
+@@ -7,14 +7,12 @@
+     tools:context=".singletest.BatteryTestActivity">
+ 
+     <Toolbar
+-        android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:background="@color/black">
+ 
+ 
+         <TextView
+-            android:id="@+id/tv_single_test"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:gravity="center_vertical|start"
+@@ -23,7 +21,7 @@
+             android:textSize="20sp" />
+     </Toolbar>
+     <TextView
+-        android:id="@+id/charge_status"
++        android:id="@+id/tv_charge_status"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="20dp"
+@@ -32,7 +30,7 @@
+         android:textSize="15sp"/>
+ 
+     <TextView
+-        android:id="@+id/current_charge"
++        android:id="@+id/tv_current_charge"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="20dp"
+@@ -41,7 +39,7 @@
+         android:textSize="15sp"/>
+ 
+     <TextView
+-        android:id="@+id/battery_voltage"
++        android:id="@+id/tv_battery_voltage"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="20dp"
+@@ -50,7 +48,7 @@
+         android:textSize="15sp"/>
+ 
+     <TextView
+-        android:id="@+id/battery_temperature"
++        android:id="@+id/tv_battery_temperature"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginStart="20dp"
+@@ -65,9 +63,9 @@
+         android:gravity="center">
+ 
+         <android.widget.Button
+-            android:id="@+id/pass"
++            android:id="@+id/btn_pass"
+             android:layout_width="130dp"
+-            android:layout_height="wrap_content"
++            android:layout_height="50dp"
+             android:layout_gravity="bottom"
+             android:layout_marginBottom="10dp"
+             android:layout_marginEnd="30dp"
+@@ -76,9 +74,9 @@
+             android:textAllCaps="false" />
+ 
+         <android.widget.Button
+-            android:id="@+id/fail"
++            android:id="@+id/btn_fail"
+             android:layout_width="130dp"
+-            android:layout_height="wrap_content"
++            android:layout_height="50dp"
+             android:layout_gravity="bottom"
+             android:layout_marginBottom="10dp"
+             android:layout_marginStart="20dp"
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+index 2ff72d9..3152c95 100644
+--- a/app/src/main/res/layout/activity_main.xml
++++ b/app/src/main/res/layout/activity_main.xml
+@@ -10,7 +10,7 @@
+     tools:context=".MainActivity">
+ 
+     <Toolbar
+-        android:id="@+id/bar"
++        android:id="@+id/toolbar"
+         android:layout_width="0dp"
+         android:layout_height="50dp"
+         android:background="@color/black"
+@@ -19,7 +19,7 @@
+         app:layout_constraintTop_toTopOf="parent" />
+ 
+     <TextView
+-        android:id="@+id/title"
++        android:id="@+id/tv_title"
+         android:layout_width="0dp"
+         android:layout_height="50dp"
+         android:text="@string/app_name"
+@@ -32,7 +32,7 @@
+         app:layout_constraintTop_toTopOf="parent" />
+ 
+     <TextView
+-        android:id="@+id/basic_info"
++        android:id="@+id/tv_basic_info"
+         android:layout_width="0dp"
+         android:layout_height="50dp"
+         android:gravity="center"
+@@ -42,10 +42,10 @@
+         android:textStyle="bold"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/bar" />
++        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+ 
+     <TextView
+-        android:id="@+id/device_name"
++        android:id="@+id/tv_device_name"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -54,10 +54,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/basic_info" />
++        app:layout_constraintTop_toBottomOf="@id/tv_basic_info" />
+ 
+     <TextView
+-        android:id="@+id/device_model"
++        android:id="@+id/tv_device_model"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -66,10 +66,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/device_name" />
++        app:layout_constraintTop_toBottomOf="@id/tv_device_name" />
+ 
+     <TextView
+-        android:id="@+id/device_version"
++        android:id="@+id/tv_device_version"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -78,10 +78,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/device_model" />
++        app:layout_constraintTop_toBottomOf="@id/tv_device_model" />
+ 
+     <TextView
+-        android:id="@+id/android_version"
++        android:id="@+id/tv_android_version"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -90,10 +90,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/device_version" />
++        app:layout_constraintTop_toBottomOf="@id/tv_device_version" />
+ 
+     <TextView
+-        android:id="@+id/ram"
++        android:id="@+id/tv_ram"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -102,10 +102,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/android_version" />
++        app:layout_constraintTop_toBottomOf="@id/tv_android_version" />
+ 
+     <TextView
+-        android:id="@+id/rom"
++        android:id="@+id/tv_rom"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -114,10 +114,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/ram" />
++        app:layout_constraintTop_toBottomOf="@id/tv_ram" />
+ 
+     <TextView
+-        android:id="@+id/battery_size"
++        android:id="@+id/tv_battery_size"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -126,10 +126,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/rom" />
++        app:layout_constraintTop_toBottomOf="@id/tv_rom" />
+ 
+     <TextView
+-        android:id="@+id/screen_size"
++        android:id="@+id/tv_screen_size"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -138,10 +138,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/battery_size" />
++        app:layout_constraintTop_toBottomOf="@id/tv_battery_size" />
+ 
+     <TextView
+-        android:id="@+id/screen_resolution"
++        android:id="@+id/tv_screen_resolution"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical|start"
+@@ -150,10 +150,10 @@
+         android:textSize="20sp"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/screen_size" />
++        app:layout_constraintTop_toBottomOf="@id/tv_screen_size" />
+ 
+     <View
+-        android:id="@+id/split_line"
++        android:id="@+id/v_split_line"
+         android:layout_width="match_parent"
+         android:layout_height="2dp"
+         android:layout_marginHorizontal="20dp"
+@@ -161,7 +161,7 @@
+         android:background="#737373"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/screen_resolution" />
++        app:layout_constraintTop_toBottomOf="@id/tv_screen_resolution" />
+ 
+     <LinearLayout
+         android:id="@+id/linear1"
+@@ -172,24 +172,22 @@
+         android:gravity="center_vertical"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/split_line">
++        app:layout_constraintTop_toBottomOf="@id/v_split_line">
+ 
+         <android.widget.Button
+             android:id="@+id/btn_capture"
+             android:layout_width="130dp"
+-            android:layout_height="wrap_content"
++            android:layout_height="60dp"
+             android:text="@string/capture"
+             android:layout_marginEnd="30dp"
+-            android:textSize="17sp"
+-            android:background="@color/btn_gray"/>
++            android:textSize="17sp"/>
+ 
+         <android.widget.Button
+             android:id="@+id/btn_call_112"
+             android:layout_width="130dp"
+-            android:layout_height="wrap_content"
++            android:layout_height="60dp"
+             android:text="@string/call_112"
+-            android:textSize="17sp"
+-            android:background="@color/btn_gray"/>
++            android:textSize="17sp"/>
+ 
+     </LinearLayout>
+ 
+@@ -206,19 +204,17 @@
+         <android.widget.Button
+             android:id="@+id/btn_single_test"
+             android:layout_width="130dp"
+-            android:layout_height="wrap_content"
++            android:layout_height="60dp"
+             android:text="@string/single_test"
+             android:textSize="17sp"
+-            android:background="@color/btn_gray"
+             android:layout_marginEnd="30dp" />
+ 
+         <android.widget.Button
+             android:id="@+id/btn_report"
+             android:layout_width="130dp"
+-            android:layout_height="wrap_content"
++            android:layout_height="60dp"
+             android:text="@string/report"
+-            android:textSize="17sp"
+-            android:background="@color/btn_gray"/>
++            android:textSize="17sp" />
+ 
+     </LinearLayout>
+ 
+diff --git a/app/src/main/res/layout/activity_single_test.xml b/app/src/main/res/layout/activity_single_test.xml
+index e3e7b3e..30e89d4 100644
+--- a/app/src/main/res/layout/activity_single_test.xml
++++ b/app/src/main/res/layout/activity_single_test.xml
+@@ -8,7 +8,7 @@
+ 
+ 
+     <Toolbar
+-        android:id="@+id/bar"
++        android:id="@+id/toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:background="@color/black">
+@@ -25,7 +25,7 @@
+     </Toolbar>
+ 
+     <androidx.recyclerview.widget.RecyclerView
+-        android:id="@+id/single_test"
++        android:id="@+id/recyv_single_test"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"/>
+ 
+diff --git a/app/src/main/res/values-zh/strings.xml b/app/src/main/res/values-zh/strings.xml
+index a2e5f8f..645000c 100644
+--- a/app/src/main/res/values-zh/strings.xml
++++ b/app/src/main/res/values-zh/strings.xml
+@@ -28,9 +28,9 @@
+     <!--    <string name="call_112">tel:112</string>-->
+     <string name="quit_app">再按一次返回键退出应用</string>
+     <string name="battery_test">电池测试</string>
+-    <string name="vibration_test">震动测试</string>
+-    <string name="miko_test">麦克测试</string>
+-    <string name="headphone_test">耳机测试</string>
++    <string name="vibration_test">振动测试</string>
++    <string name="mike_test">麦克测试</string>
++    <string name="headphones_test">耳机测试</string>
+     <string name="lcd_test">LCD测试</string>
+     <string name="speaker_test">喇叭测试</string>
+     <string name="handset_test">听筒测试</string>
+@@ -50,26 +50,26 @@
+     <string name="judging_charging">未充电不能点击通过</string>
+     <string name="position">position</string>
+     <string name="sr_factory_mode">sr_factory_mode</string>
+-    <string name="vi_lv">振动测试中，请观察是否正常...</string>
+-    <string name="miko_text">先点击录音,5秒后将会自动播放录音...</string>
++    <string name="vibraion_test_tip">振动测试中，请观察是否正常...</string>
++    <string name="mike_test_tip">先点击录音,5秒后将会自动播放录音...</string>
+     <string name="record">录音</string>
+     <string name="recording">录音中,请说话...</string>
+-    <string name="record_finish_test">测试完成，已完成录音和播放...</string>
+-    <string name="record_finish">录音完成,播放录音中...</string>
++    <string name="record_playing">录音完成,播放录音中...</string>
++    <string name="record_test_finish">测试完成，已完成录音和播放...</string>
+     <string name="testing">测试中</string>
+     <string name="retest">重测</string>
+-    <string name="start">开始</string>
+-    <string name="headphone_text">先插入耳机,然后点击录音，5秒后将会自动播放录音...</string>
++    <string name="begin">开始</string>
++    <string name="headphones_test_tip">先插入耳机,然后点击录音，5秒后将会自动播放录音...</string>
+     <string name="front_camera">前摄</string>
+     <string name="back_camera">后摄</string>
+     <string name="flash_text">闪光灯测试中,请观察是否正常...</string>
+     <string name="up_volume">音量上</string>
+     <string name="down_volume">音量下</string>
+     <string name="power_volume">电源键</string>
+-    <string name="insert_headphone">耳机已插入</string>
+-    <string name="plz_insert_headphone">请插入耳机</string>
++    <string name="insert_headphones">耳机已插入</string>
++    <string name="plz_insert_headphones">请插入耳机</string>
+     <string name="plz_insert_and_test">请插入耳机之后再点击录音</string>
+-    <string name="miko_quit">在测试中或者未测试不能通过</string>
++    <string name="mike_quit">在测试中或者未测试不能通过</string>
+     <string name="camera_quit">还未测试结束,请切换摄像头测试后点击通过</string>
+     <string name="key_quit">您还未结束测试,不能点击通过</string>
+     <string name="not_test">未测试</string>
+diff --git a/app/src/main/res/values/colors.xml b/app/src/main/res/values/colors.xml
+index 2c38608..78ecc08 100644
+--- a/app/src/main/res/values/colors.xml
++++ b/app/src/main/res/values/colors.xml
+@@ -3,7 +3,6 @@
+     <color name="black">#FF000000</color>
+     <color name="white">#FFFFFFFF</color>
+     <color name="gray">#555555</color>
+-    <color name="btn_gray">#cccccc</color>
+     <color name="green">#00FF00</color>
+     <color name="red">#FF0000</color>s
+ </resources>
+\ No newline at end of file
+diff --git a/app/src/main/res/values/strings.xml b/app/src/main/res/values/strings.xml
+index 3fefeb1..60afd08 100644
+--- a/app/src/main/res/values/strings.xml
++++ b/app/src/main/res/values/strings.xml
+@@ -28,8 +28,8 @@
+     <string name="quit_app">Press the back button again to exit the application.</string>
+     <string name="battery_test">Battery Test</string>
+     <string name="vibration_test">Vibration Test</string>
+-    <string name="miko_test">Miko Test</string>
+-    <string name="headphone_test">Headphone Test</string>
++    <string name="mike_test">Mike Test</string>
++    <string name="headphones_test">Headphone Test</string>
+     <string name="lcd_test">LCD Test</string>
+     <string name="speaker_test">Speaker test</string>
+     <string name="handset_test">Handset Test</string>
+@@ -49,26 +49,26 @@
+     <string name="judging_charging">Cannot click pass without charging.</string>
+     <string name="position">position</string>
+     <string name="sr_factory_mode">sr_factory_mode</string>
+-    <string name="vi_lv">Vibration test, please observe if it is normal...</string>
+-    <string name="miko_text">Click on the recording first, and the recording will automatically play after 5 seconds...</string>
++    <string name="vibraion_test_tip">Vibration test, please observe whether it is normal...</string>
++    <string name="mike_test_tip">Click on the recording button first, and the recording will automatically play after 5 seconds...</string>
+     <string name="record">Recording</string>
+-    <string name="recording"> In the recording, please speak... </string>
+-    <string name="record_finish_test"> Test completed, recording and playback completed... </string>
+-    <string name="record_finish"> Recording completed, playing recording... </string>
++    <string name="recording"> During the recording, please speak... </string>
++    <string name="record_playing"> The recording is complete, playing recording... </string>
++    <string name="record_test_finish"> Test completed, recording and playback completed... </string>
+     <string name="testing">Testing</string>
+     <string name="retest">Retest</string>
+-    <string name="start">Start</string>
+-    <string name="headphone_text">First, plug in the headphones, then click Recording. After 5 seconds, the recording will automatically play...</string>
++    <string name="begin">BEGIN</string>
++    <string name="headphones_test_tip">Plug in the headphones first, then click the recording button, and the recording will automatically play after 5 seconds...</string>
+     <string name="front_camera">Front camera</string>
+     <string name="back_camera">Back camera</string>
+     <string name="flash_text">Flash test, please observe if it is normal...</string>
+     <string name="up_volume">Volume up</string>
+     <string name="down_volume">Volume down</string>
+     <string name="power_volume">Power</string>
+-    <string name="insert_headphone">The earphones have been plugged in.</string>
+-    <string name="plz_insert_headphone"> Please insert the earphones.</string>
++    <string name="insert_headphones">The earphones have been plugged in.</string>
++    <string name="plz_insert_headphones"> Please insert the headphones.</string>
+     <string name="plz_insert_and_test">Please insert your headphones before clicking record.</string>
+-    <string name="miko_quit">In testing or not tested cannot pass.</string>
++    <string name="mike_quit">In testing or not tested cannot pass.</string>
+     <string name="camera_quit">The test is not over yet, please switch the camera to test and click pass.</string>
+     <string name="key_quit">You have not finished the test yet, so you cannot click pass.</string>
+     <string name="not_test">Not tested</string>
