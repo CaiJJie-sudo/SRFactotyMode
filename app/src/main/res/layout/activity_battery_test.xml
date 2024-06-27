@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".singletest.BatteryTestActivity">
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/black">
+
+
+        <TextView
+            android:id="@+id/tv_single_test"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|start"
+            android:text="@string/battery_test"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </Toolbar>
+    <TextView
+        android:id="@+id/charge_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/charge_status"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/current_charge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/current_battery"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/battery_voltage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/battery_voltage"
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@+id/battery_temperature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/battery_temperature"
+        android:textSize="15sp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <android.widget.Button
+            android:id="@+id/pass"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="30dp"
+            android:text="@string/pass"
+            android:textSize="15sp"
+            android:textAllCaps="false" />
+
+        <android.widget.Button
+            android:id="@+id/fail"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:text="@string/fail"
+            android:textSize="15sp"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+
+</LinearLayout>
