@@ -4,24 +4,34 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".singletest.LcdTestActivity">
+    tools:context=".singletest.FlashTestActivity">
 
-
-    <android.widget.Button
-        android:id="@+id/btn_begin"
-        android:layout_width="130dp"
+    <Toolbar
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="330dp"
-        android:text="@string/begin"
-        android:textSize="15sp"
-        android:textAllCaps="false" />
+        android:background="@color/black">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|start"
+            android:text="@string/flash_test"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </Toolbar>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/flash_test_tip"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
+        android:gravity="center">
 
         <android.widget.Button
             android:id="@+id/btn_pass"
@@ -45,4 +55,5 @@
             android:textSize="15sp"
             android:textAllCaps="false" />
     </LinearLayout>
+
 </LinearLayout>

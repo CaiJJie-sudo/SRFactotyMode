@@ -4,24 +4,37 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".singletest.LcdTestActivity">
+    tools:context=".singletest.CameraTestActivity">
 
-
-    <android.widget.Button
-        android:id="@+id/btn_begin"
-        android:layout_width="130dp"
+    <Toolbar
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="330dp"
-        android:text="@string/begin"
+        android:background="@color/black">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|start"
+            android:text="@string/camera_test"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </Toolbar>
+    <android.widget.Button
+        android:id="@+id/btn_camera_revert"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/front_camera"
         android:textSize="15sp"
         android:textAllCaps="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone">
+        android:gravity="center">
 
         <android.widget.Button
             android:id="@+id/btn_pass"
@@ -45,4 +58,5 @@
             android:textSize="15sp"
             android:textAllCaps="false" />
     </LinearLayout>
+
 </LinearLayout>
