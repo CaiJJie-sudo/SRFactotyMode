@@ -14,7 +14,7 @@
     <string name="capture">CAPTURE</string>
     <string name="call_112">CALL 112</string>
     <string name="single_test">Single Test</string>
-    <string name="report">REPORT</string>
+    <string name="report">Report</string>
     <string name="mAh">mAh</string>
     <string name="g">G</string>
     <string name="gb">GB</string>
@@ -75,5 +75,5 @@
     <string name="mike_quit">In testing or not tested cannot PASS.</string>
     <string name="camera_quit">The test is not over yet, please switch the camera to test and click PASS.</string>
     <string name="key_quit">You have not finished the test yet, so you cannot click PASS.</string>
-    <string name="not_test">Not tested</string>
+    <string name="not_test">Not Tested</string>
 </resources>
