@@ -22,10 +22,10 @@
     <string name="inch">英寸</string>
     <string name="pixel">像素</string>
     <string name="permission_title">权限申请</string>
-    <string name="permission_message">由于萨瑞工厂模式不能获取权限,不能正常运行，请设置权限后使用;设置路径:系统设置->萨瑞工厂模式->权限</string>
+    <string name="permission_message">由于萨瑞工厂模式不能获取足够的权限，不能正常运行，请设置权限后使用；设置路径:系统设置->萨瑞工厂模式->权限</string>
     <string name="cancel">取消</string>
     <string name="go_setting">去设置</string>
-    <!--    <string name="call_112">tel:112</string>-->
+    <string name="tel_112">tel:112</string>
     <string name="quit_app">再按一次返回键退出应用</string>
     <string name="battery_test">电池测试</string>
     <string name="vibration_test">振动测试</string>

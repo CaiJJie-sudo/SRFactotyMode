@@ -21,10 +21,10 @@
     <string name="inch">Inch</string>
     <string name="pixel">Pixel</string>
     <string name="permission_title"> Permission request </string>
-    <string name="permission_message"> Due to the inability to obtain permissions in Sari factory mode, it cannot run normally. Please set permissions and use it. Setting path: System Settings -> SrFactoryMode -> Permissions </string>
+    <string name="permission_message"> Since the SRFactoryMode have not enough permissions, it can not run normally. Please set permissions and use them. Setting path: System Settings -> SRFactoryMode -> Permissions </string>
     <string name="cancel"> Cancel </string>
     <string name="go_setting"> Go to settings </string>
-    <!--    <string name="call_112">tel:112</string>-->
+    <string name="tel_112">tel:112</string>-->
     <string name="quit_app">Press the back button again to exit the application.</string>
     <string name="battery_test">Battery Test</string>
     <string name="vibration_test">Vibration Test</string>

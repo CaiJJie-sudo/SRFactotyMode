@@ -7,22 +7,32 @@
     tools:context=".SingleTestActivity">
 
 
-    <Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/black">
 
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_back"
+            android:background="@color/black"
+            />
+
         <TextView
             android:id="@+id/tv_single_test"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical|start"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="30dp"
             android:text="@string/single_test"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-    </Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyv_single_test"
