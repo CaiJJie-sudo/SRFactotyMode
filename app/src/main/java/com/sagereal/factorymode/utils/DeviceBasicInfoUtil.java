@@ -34,7 +34,7 @@ public class DeviceBasicInfoUtil {
         this.screenResolution = setScreenResolution(context);
     }
 
-    // 获取设备的RAM并返回整型GB
+    // 获取设备的RAM并向上取整返回整型GB
     private int setmDeviceRam(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -42,7 +42,7 @@ public class DeviceBasicInfoUtil {
         return (int) Math.ceil(memoryInfo.totalMem / GB_TO_BYTES);
     }
 
-    // 获取设备的ROM并返回整型GB
+    // 获取设备的ROM并向上取整返回整型GB
     private int setDeviceRom() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
         int totalRom = (int) Math.ceil(statFs.getTotalBytes() / GB_TO_BYTES);

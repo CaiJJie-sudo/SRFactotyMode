@@ -2,28 +2,27 @@ package com.sagereal.factorymode;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.view.View;
-
+import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.databinding.ActivityMainBinding;
 import com.sagereal.factorymode.utils.DeviceBasicInfoUtil;
+import com.sagereal.factorymode.utils.PermissionRequestUtil;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private ActivityMainBinding binding;
-    private DeviceBasicInfoUtil deviceInfo;
+    private DeviceBasicInfoUtil deviceBasicInfoUtil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        deviceInfo = new DeviceBasicInfoUtil(getApplicationContext());
+        deviceBasicInfoUtil = new DeviceBasicInfoUtil(this);
         binding.btnCapture.setOnClickListener(this);
         binding.btnCall112.setOnClickListener(this);
         binding.btnSingleTest.setOnClickListener(this);
@@ -34,28 +33,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 初始化首页的基本信息
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     public void initHomePage(){
-        binding.tvDeviceName.setText(deviceInfo.getDeviceName());
-        binding.tvDeviceModel.setText(deviceInfo.getDeviceModel());
-        binding.tvDeviceVersion.setText(deviceInfo.getDeviceVersion());
-        binding.tvAndroidVersion.setText(deviceInfo.getAndroidVersion());
-        binding.tvRam.setText(deviceInfo.getRam() + " " + getText(R.string.g));
-        binding.tvRom.setText(deviceInfo.getRom() + " " + getText(R.string.gb));
-        binding.tvBatterySize.setText(deviceInfo.getBatterySize() + " " + getText(R.string.mAh));
-        binding.tvScreenSize.setText(deviceInfo.getScreenSize() + " " + getText(R.string.inch));
-        binding.tvScreenResolution.setText(deviceInfo.getScreenResolution() + " " + getText(R.string.pixel));
+        binding.tvDeviceName.setText(deviceBasicInfoUtil.getDeviceName());
+        binding.tvDeviceModel.setText(deviceBasicInfoUtil.getDeviceModel());
+        binding.tvDeviceVersion.setText(deviceBasicInfoUtil.getDeviceVersion());
+        binding.tvAndroidVersion.setText(deviceBasicInfoUtil.getAndroidVersion());
+        binding.tvRam.setText(deviceBasicInfoUtil.getRam() + " " + getText(R.string.g));
+        binding.tvRom.setText(deviceBasicInfoUtil.getRom() + " " + getText(R.string.gb));
+        binding.tvBatterySize.setText(deviceBasicInfoUtil.getBatterySize() + " " + getText(R.string.mAh));
+        binding.tvScreenSize.setText(deviceBasicInfoUtil.getScreenSize() + " " + getText(R.string.inch));
+        binding.tvScreenResolution.setText(deviceBasicInfoUtil.getScreenResolution() + " " + getText(R.string.pixel));
     }
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_capture){
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivity(intent);
+            capture();
         }
         if (v.getId() == R.id.btn_call_112) {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_DIAL);
-            Uri uri = Uri.parse(String.valueOf(R.string.tel_112));
-            intent.setData(uri);
-            startActivity(intent);
+            call112();
         }
         if(v.getId() == R.id.btn_single_test){
             startActivity(new Intent(this, SingleTestActivity.class));
@@ -65,22 +59,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // 显示权限申请对话框
-    public void showPermissionDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.permission_title);
-        builder.setMessage(R.string.permission_message);
-        // 跳转至设置页面
-        builder.setPositiveButton(R.string.go_setting, (dialog, which) -> {
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            Uri uri = Uri.fromParts("package", getPackageName(), null);
+    // 相机测试
+    private void capture() {
+        // 检查是否拥有相机权限
+        if (!PermissionRequestUtil.onRequestSinglePermission(this,Manifest.permission.CAMERA)){
+            PermissionRequestUtil.showPermissionDialog(this);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivity(intent);
+        }
+    }
+    // 自动带号码跳转拨打电话页面测试
+    private void call112(){
+       // 检查是否拥有拨打电话的权限
+       if (!PermissionRequestUtil.onRequestSinglePermission(this,Manifest.permission.CALL_PHONE)){
+           PermissionRequestUtil.showPermissionDialog(this);
+       } else {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_DIAL);
+            Uri uri = Uri.parse(getString(R.string.tel_112));
             intent.setData(uri);
             startActivity(intent);
-        });
-        // 取消
-        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
-            dialog.dismiss();
-        });
-        builder.show();
+        }
     }
+
 }
