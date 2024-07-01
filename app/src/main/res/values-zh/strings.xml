@@ -62,7 +62,7 @@
     <string name="headphones_test_tip">先插入耳机,然后点击录音，5秒后将会自动播放录音...</string>
     <string name="speaker_test_tip">喇叭测试中，请关注喇叭是否有声音...</string>
     <string name="speaker_test_headphones">耳机已插入，已禁止点击通过</string>
-    <string name="receiver_test_tip">听筒测试中，请关注听筒事是否有声音...</string>
+    <string name="receiver_test_tip">听筒测试中，请关注听筒是否有声音...</string>
     <string name="receiver_test_no_headphones_">未插入耳机，已禁止点击通过</string>
     <string name="front_camera">前摄</string>
     <string name="rear_camera">后摄</string>

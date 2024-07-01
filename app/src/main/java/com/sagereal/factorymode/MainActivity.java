@@ -1,6 +1,5 @@
 package com.sagereal.factorymode;
 
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;

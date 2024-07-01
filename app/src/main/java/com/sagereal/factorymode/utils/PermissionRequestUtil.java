@@ -1,6 +1,5 @@
 package com.sagereal.factorymode.utils;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +10,7 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
 import com.sagereal.factorymode.R;
 
 public class PermissionRequestUtil {
