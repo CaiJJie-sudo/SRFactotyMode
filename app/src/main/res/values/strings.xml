@@ -37,7 +37,7 @@
     <string name="flash_test">Flash Test</string>
     <string name="keys_test">Keys Test</string>
     <string name="charge_status">Charge status:</string>
-    <string name="current_battery">Battery level:</string>
+    <string name="battery_level">Battery level:</string>
     <string name="battery_voltage">Battery voltage:</string>
     <string name="battery_temperature">Battery temperature:</string>
     <string name="pass">PASS</string>

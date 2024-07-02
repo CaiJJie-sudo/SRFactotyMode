@@ -1,7 +1,12 @@
 package com.sagereal.factorymode.utils;
 
+import static androidx.core.content.ContextCompat.registerReceiver;
+
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -21,7 +26,6 @@ public class DeviceBasicInfoUtil {
     private final double screenSize;
     private final String screenResolution;
 
-    // 构造器
     public DeviceBasicInfoUtil(Context context) {
         this.deviceName = Build.DEVICE;
         this.deviceModel = Build.MODEL;
@@ -34,7 +38,11 @@ public class DeviceBasicInfoUtil {
         this.screenResolution = setScreenResolution(context);
     }
 
-    // 获取设备的RAM并向上取整返回整型GB
+    /**
+     * 获取设备的RAM并向上取整返回整型GB
+     * @param context
+     * @return
+     */
     private int setmDeviceRam(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
@@ -42,7 +50,10 @@ public class DeviceBasicInfoUtil {
         return (int) Math.ceil(memoryInfo.totalMem / GB_TO_BYTES);
     }
 
-    // 获取设备的ROM并向上取整返回整型GB
+    /**
+     * 获取设备的ROM并向上取整返回整型GB
+     * @return
+     */
     private int setDeviceRom() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
         int totalRom = (int) Math.ceil(statFs.getTotalBytes() / GB_TO_BYTES);
@@ -55,7 +66,11 @@ public class DeviceBasicInfoUtil {
         return totalRom;
     }
 
-    // 获取设备的电池容量
+    /**
+     * 获取设备的电池容量
+     * @param context
+     * @return
+     */
     private int setBatterySize(Context context) {
         Object powerProfile = null;
         double batterySize = 0;
@@ -69,8 +84,12 @@ public class DeviceBasicInfoUtil {
         return (int)batterySize;
     }
 
-    // 获取设备的屏幕尺寸
-    public static double setScreenSize(Context context) {
+    /**
+     * 获取设备的屏幕尺寸
+     * @param context
+     * @return
+     */
+    private static double setScreenSize(Context context) {
         DisplayMetrics metrics = getMetrics(context);
         // 获取屏幕物理尺寸（英寸 = 像素值 / 每英寸的距离中的像素）
         float widthInches = metrics.widthPixels / metrics.xdpi;
@@ -80,7 +99,11 @@ public class DeviceBasicInfoUtil {
         return Math.round(screenSize * 100.0) / 100.0;
     }
 
-    // 获取设备的屏幕分辨率
+    /**
+     * 获取设备的屏幕分辨率
+     * @param context
+     * @return
+     */
     private String setScreenResolution(Context context){
         DisplayMetrics metrics = getMetrics(context);
         // 获取屏幕物理尺寸（英寸 = 像素值 / 每英寸的距离中的像素）
@@ -94,6 +117,17 @@ public class DeviceBasicInfoUtil {
         return metrics;
     }
 
+    /**
+     * 电池单项测试---获取当前充电状态
+     * @param context
+     */
+    private static boolean batteryChargingStatus(Context context){
+        // 获取当前充电状态
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent intent = context.registerReceiver(null, intentFilter);
+        int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        return status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
+    }
     public String getDeviceName() {
         return deviceName;
     }

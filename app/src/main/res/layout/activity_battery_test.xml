@@ -20,42 +20,80 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
     </androidx.appcompat.widget.Toolbar>
-    <TextView
-        android:id="@+id/tv_charge_status"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/charge_status"
-        android:textSize="15sp"/>
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/charge_status"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tv_charge_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_current_charge"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/current_battery"
-        android:textSize="15sp"/>
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/battery_level"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tv_battery_level"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_battery_voltage"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/battery_voltage"
-        android:textSize="15sp"/>
-
-    <TextView
-        android:id="@+id/tv_battery_temperature"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/battery_voltage"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tv_battery_voltage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/battery_temperature"
-        android:textSize="15sp"/>
-
+        android:layout_marginTop="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/battery_temperature"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tv_battery_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="15sp"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

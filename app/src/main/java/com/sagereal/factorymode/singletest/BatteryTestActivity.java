@@ -21,4 +21,8 @@ public class BatteryTestActivity extends AppCompatActivity {
         intent.getIntExtra(String.valueOf(EnumData.BATTERY_POSITION), 0);
         context.startActivity(intent);
     }
+
+    public void initBatteryInfo(){
+
+    }
 }

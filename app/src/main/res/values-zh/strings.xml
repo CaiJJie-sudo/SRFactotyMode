@@ -38,7 +38,7 @@
     <string name="flash_test">闪光灯测试</string>
     <string name="keys_test">按键测试</string>
     <string name="charge_status">充电状态:</string>
-    <string name="current_battery">当前电量:</string>
+    <string name="battery_level">当前电量:</string>
     <string name="battery_voltage">电池电压:</string>
     <string name="battery_temperature">电池温度:</string>
     <string name="pass">通过</string>
