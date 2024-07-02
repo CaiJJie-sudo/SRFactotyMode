@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initHomePage();
     }
 
-    // 初始化首页的基本信息
+    /**
+     * 初始化首页的基本信息
+     */
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     public void initHomePage(){
         binding.tvDeviceName.setText(deviceBasicInfoUtil.getDeviceName());
@@ -58,7 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // 相机测试
+    /**
+     * Capture 测试
+     */
     private void capture() {
         // 检查是否拥有相机权限
         if (!PermissionRequestUtil.onRequestSinglePermission(this,Manifest.permission.CAMERA)){
@@ -68,7 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
     }
-    // 自动带号码跳转拨打电话页面测试
+
+    /**
+     * 自动带号码跳转拨打电话测试
+     */
     private void call112(){
        // 检查是否拥有拨打电话的权限
        if (!PermissionRequestUtil.onRequestSinglePermission(this,Manifest.permission.CALL_PHONE)){

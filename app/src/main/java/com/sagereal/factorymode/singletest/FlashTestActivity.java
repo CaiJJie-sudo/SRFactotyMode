@@ -16,7 +16,7 @@ public class FlashTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flash_test);
     }
-    public static void openActivity(Context context, int adapterPosition) {
+    public static void openActivity(Context context) {
         Intent intent = new Intent(context, FlashTestActivity.class);
         intent.getIntExtra(String.valueOf(EnumData.FLASH_POSITION), 0);
         context.startActivity(intent);

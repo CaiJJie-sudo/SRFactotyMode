@@ -16,7 +16,7 @@ public class HeadphonesTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_headphones_test);
     }
-    public static void openActivity(Context context, int adapterPosition) {
+    public static void openActivity(Context context) {
         Intent intent = new Intent(context, HeadphonesTestActivity.class);
         intent.getIntExtra(String.valueOf(EnumData.HEADPHONES_POSITION), 0);
         context.startActivity(intent);

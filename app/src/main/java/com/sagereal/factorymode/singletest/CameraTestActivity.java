@@ -18,7 +18,7 @@ public class CameraTestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_test);
     }
 
-    public static void openActivity(Context context, int adapterPosition) {
+    public static void openActivity(Context context) {
         Intent intent = new Intent(context, CameraTestActivity.class);
         intent.getIntExtra(String.valueOf(EnumData.CAMERA_POSITION), 0);
         context.startActivity(intent);

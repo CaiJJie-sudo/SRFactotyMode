@@ -11,7 +11,6 @@ public enum EnumData {
     CAMERA_POSITION(7),
     FLASH_POSITION(8),
     KEY_POSITION(9);
-
     private final int value;
 
     EnumData(int value) {

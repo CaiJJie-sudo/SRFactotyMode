@@ -1,12 +1,7 @@
 package com.sagereal.factorymode.utils;
 
-import static androidx.core.content.ContextCompat.registerReceiver;
-
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -115,18 +110,6 @@ public class DeviceBasicInfoUtil {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
         return metrics;
-    }
-
-    /**
-     * 电池单项测试---获取当前充电状态
-     * @param context
-     */
-    private static boolean batteryChargingStatus(Context context){
-        // 获取当前充电状态
-        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent intent = context.registerReceiver(null, intentFilter);
-        int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        return status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL;
     }
     public String getDeviceName() {
         return deviceName;

@@ -62,34 +62,34 @@ public class SingleTestItemAdapter extends RecyclerView.Adapter<SingleTestItemAd
             @Override
             public void onClick(View v) {
                 if (holder.getAdapterPosition() == EnumData.BATTERY_POSITION.getValue()){
-                    BatteryTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    BatteryTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.VIBRATION_POSITION.getValue()){
-                    VibrationTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    VibrationTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.MIKE_POSITION.getValue()){
-                    MikeTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    MikeTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.HEADPHONES_POSITION.getValue()){
-                    HeadphonesTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    HeadphonesTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.LCD_POSITION.getValue()){
-                    LcdTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    LcdTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.SPEAKER_POSITION.getValue()){
-                    SpeakerTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    SpeakerTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.RECEIVER_POSITION.getValue()){
-                    ReceiverTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    ReceiverTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() ==  EnumData.CAMERA_POSITION.getValue()){
-                    CameraTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    CameraTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.FLASH_POSITION.getValue()){
-                    FlashTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    FlashTestActivity.openActivity(holder.itemView.getContext());
                 }
                 if (holder.getAdapterPosition() == EnumData.KEY_POSITION.getValue()){
-                    KeysTestActivity.openActivity(holder.itemView.getContext(), holder.getAdapterPosition());
+                    KeysTestActivity.openActivity(holder.itemView.getContext());
                 }
             }
         });

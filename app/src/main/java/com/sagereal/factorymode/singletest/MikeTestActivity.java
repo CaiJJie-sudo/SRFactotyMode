@@ -16,7 +16,7 @@ public class MikeTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mike_test);
     }
-    public static void openActivity(Context context, int adapterPosition) {
+    public static void openActivity(Context context) {
         Intent intent = new Intent(context, MikeTestActivity.class);
         intent.getIntExtra(String.valueOf(EnumData.MIKE_POSITION), 0);
         context.startActivity(intent);

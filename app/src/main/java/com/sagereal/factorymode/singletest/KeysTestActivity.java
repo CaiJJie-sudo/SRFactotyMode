@@ -16,7 +16,7 @@ public class KeysTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_keys_test);
     }
-    public static void openActivity(Context context, int adapterPosition) {
+    public static void openActivity(Context context) {
         Intent intent = new Intent(context, KeysTestActivity.class);
         intent.getIntExtra(String.valueOf(EnumData.KEY_POSITION), 0);
         context.startActivity(intent);

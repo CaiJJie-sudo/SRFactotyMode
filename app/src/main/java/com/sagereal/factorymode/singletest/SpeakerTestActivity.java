@@ -16,7 +16,7 @@ public class SpeakerTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_speaker_test);
     }
-    public static void openActivity(Context context, int adapterPosition) {
+    public static void openActivity(Context context) {
         Intent intent = new Intent(context, SpeakerTestActivity.class);
         intent.getIntExtra(String.valueOf(EnumData.SPEAKER_POSITION), 0);
         context.startActivity(intent);
