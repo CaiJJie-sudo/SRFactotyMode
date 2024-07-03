@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.os.Handler;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +48,10 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
             startRecording();
         }
     }
+
+    /**
+     * 开始录音
+     */
     private void startRecording() {
         binding.tvMikeRecordTip.setVisibility(View.VISIBLE);
         binding.tvMikeRecordTip.setText(getString(R.string.recording));
@@ -69,56 +71,46 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    stopRecordingAndPlay();
+                    stopRecording();
                 }
-            }, 5000); // 5秒后停止录音并播放
+            }, 5000); // 5秒后停止录音
         } catch (IOException e) {
             e.printStackTrace();
             // 添加日志输出或其他处理
         }
     }
-
-    private void stopRecordingAndPlay() {
+    /**
+     * 停止录音
+     */
+    private void stopRecording() {
+        if (mediaRecorder != null) {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            mediaRecorder = null;
+            // 停止录音后立即播放录音
+            playRecording();
+        }
+    }
+    /**
+     * 播放录音
+     */
+    private void playRecording() {
+        mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(mikeAudioFilePath);
             mediaPlayer.prepare();
             mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.stop();
-                    mp.release();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            binding.tvMikeRecordTip.setText(R.string.record_test_finish);
-                            binding.btnMikeRecord.setText(R.string.retest);
-                            binding.btnMikeRecord.setEnabled(true);
-                        }
-                    });
-                }
+            binding.tvMikeRecordTip.setText(R.string.record_playing);
+            // 播放完成
+            mediaPlayer.setOnCompletionListener(mp -> {
+                mediaPlayer.release();
+                mediaPlayer = null;
+                binding.tvMikeRecordTip.setText(R.string.record_test_finish);
+                binding.btnMikeRecord.setText(R.string.retest);
+                binding.btnMikeRecord.setEnabled(true);
             });
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d("cai", "失败");
-            // 添加日志输出或其他处理
-            Toast.makeText(this, "播放录音失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-    }
-    /**
-     * 在活动停止时，释放已经分配的录音和播放资源
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mediaRecorder != null) {
-            mediaRecorder.release();
-            mediaRecorder = null;
-        }
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
         }
     }
 }
