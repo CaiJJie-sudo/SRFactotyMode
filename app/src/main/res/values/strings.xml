@@ -74,7 +74,7 @@
     <string name="not_plugged_headphones"> Please insert the headphones.</string>
     <string name="plz_insert_and_test">Please insert your headphones before clicking record.</string>
     <string name="cannot_pass_fail">Not tested or in testing cannot PASS.</string>
-    <string name="camera_quit">The test is not over yet, please switch the camera to test and click PASS.</string>
+    <string name="camera_cannot_pass">The test is not over yet, please revert the camera to test and click PASS.</string>
     <string name="key_quit">You have not finished the test yet, so you cannot click PASS.</string>
     <string name="not_test">Not Tested</string>
 </resources>

@@ -1,60 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".singletest.CameraTestActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/black">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|start"
-            android:text="@string/camera_test"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-    </androidx.appcompat.widget.Toolbar>
-    <android.widget.Button
-        android:id="@+id/btn_camera_revert"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_gravity="right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:text="@string/front_camera"
-        android:textSize="15sp"
-        android:textAllCaps="false" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:orientation="vertical"
+        tools:context=".singletest.CameraTestActivity">
 
-        <android.widget.Button
-            android:id="@+id/btn_pass"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="30dp"
-            android:text="@string/pass"
-            android:textSize="15sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/black">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|start"
+                    android:text="@string/camera_test"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+            </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
-        <android.widget.Button
-            android:id="@+id/btn_fail"
-            android:layout_width="130dp"
-            android:layout_height="50dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <SurfaceView
+                android:id="@+id/v_camera_test"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_camera_revert"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/front_camera"
+                android:textSize="15sp"
+                android:textAllCaps="false" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:text="@string/fail"
-            android:textSize="15sp"/>
+            android:gravity="center">
+
+            <android.widget.Button
+                android:id="@+id/btn_pass"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="30dp"
+                android:text="@string/pass"
+                android:textSize="15sp"/>
+
+            <android.widget.Button
+                android:id="@+id/btn_fail"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/fail"
+                android:textSize="15sp"/>
+        </LinearLayout>
+
     </LinearLayout>
+</layout>
 
-</LinearLayout>
