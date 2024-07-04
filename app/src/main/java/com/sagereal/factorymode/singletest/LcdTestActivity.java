@@ -43,8 +43,7 @@ public class LcdTestActivity extends AppCompatActivity implements View.OnClickLi
                 binding.lcdLayout.setBackgroundColor(getResources().getColor(R.color.white));
                 binding.linearPassFail.setVisibility(View.VISIBLE);
             } else {
-                screenColorIndex = screenColorIndex + 1;
-                currentColor = screenColors[screenColorIndex];
+                currentColor = screenColors[++screenColorIndex];
                 binding.lcdLayout.setBackgroundColor(getResources().getColor(currentColor));
             }
 

@@ -71,10 +71,10 @@
     <string name="key_volume_up">音量上键</string>
     <string name="key_volume_down">音量下键</string>
     <string name="key_power">电源键</string>
-    <string name="insert_headphones">耳机已插入</string>
-    <string name="plz_insert_headphones">请插入耳机</string>
+    <string name="plugged_headphones">耳机已插入</string>
+    <string name="not_plugged_headphones">请插入耳机</string>
     <string name="plz_insert_and_test">请插入耳机之后再点击录音</string>
-    <string name="mike_quit">在测试中或者未测试不能通过</string>
+    <string name="cannot_pass_fail">未测试或在测试中不能通过</string>
     <string name="camera_quit">还未测试结束,请切换摄像头测试后点击通过</string>
     <string name="key_quit">您还未结束测试,不能点击通过</string>
     <string name="not_test">未测试</string>
