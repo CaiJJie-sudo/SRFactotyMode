@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +17,7 @@ import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityBatteryTestBinding;
 import com.sagereal.factorymode.utils.EnumData;
 
-public class BatteryTestActivity extends AppCompatActivity {
+public class BatteryTestActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityBatteryTestBinding binding;
     private boolean isReceiverRegistered = false;
 
@@ -24,6 +26,7 @@ public class BatteryTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_battery_test);
         initBatteryInfo(); // 初始化时获取全部电池信息
+        binding.btnPass.setOnClickListener(this);
     }
 
     /**
@@ -78,18 +81,17 @@ public class BatteryTestActivity extends AppCompatActivity {
         binding.tvBatteryVoltage.setText(String.valueOf(batteryVoltage()) + getString(R.string.voltage_unit));
         binding.tvBatteryTemperature.setText(String.valueOf(batteryTemperature()) + getString(R.string.temperature_unit));
     }
-
     /**
      * 只更新电池状态
      */
     private void getBatteryChargingStatus(){
-        binding.tvBatteryChargeStatus.setText(batteryChargingStatus() ? getString(R.string.is_charging) : getString(R.string.no_charging));
+        binding.tvBatteryChargeStatus.setText(batteryIsCharging() ? getString(R.string.is_charging) : getString(R.string.no_charging));
     }
     /**
      * 获取电池状态。
-     * @return 是否处于充电状态（包括充满电）
+     * @return 电池是否处于充电状态（包括充满电）
      */
-    private boolean batteryChargingStatus() {
+    private boolean batteryIsCharging() {
         IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent intent = registerReceiver(null, intentFilter);
         if (intent != null) {
@@ -138,5 +140,14 @@ public class BatteryTestActivity extends AppCompatActivity {
             return batteryTemp / 10.0f;
         }
         return 0;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_pass){
+            if(!batteryIsCharging()){
+                Toast.makeText(v.getContext(), getString(R.string.battery_test_tip), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

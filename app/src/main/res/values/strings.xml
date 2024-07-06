@@ -47,9 +47,9 @@
     <string name="battery_level_unit">%</string>
     <string name="voltage_unit">mV</string>
     <string name="temperature_unit">℃</string>
-    <string name="judging_charging">Cannot click PASS without charging.</string>
     <string name="position">position</string>
     <string name="sr_factory_mode">sr_factory_mode</string>
+    <string name="battery_test_tip">Uncharged can not click the PASS</string>
     <string name="vibraion_test_tip">Vibration test, please observe whether it is normal...</string>
     <string name="mike_test_tip">Click on the recording button first, and the recording will automatically play after 5 seconds...</string>
     <string name="record">Recording</string>

@@ -48,9 +48,9 @@
     <string name="battery_level_unit">%</string>
     <string name="voltage_unit">毫伏</string>
     <string name="temperature_unit">度</string>
-    <string name="judging_charging">未充电不能点击通过</string>
     <string name="position">position</string>
     <string name="sr_factory_mode">sr_factory_mode</string>
+    <string name="battery_test_tip">未充电不能点击通过</string>
     <string name="vibraion_test_tip">振动测试中，请观察是否正常...</string>
     <string name="mike_test_tip">先点击录音,5秒后将会自动播放录音...</string>
     <string name="record">录音</string>
