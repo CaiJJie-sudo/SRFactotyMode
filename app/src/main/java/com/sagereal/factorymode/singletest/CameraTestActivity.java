@@ -17,8 +17,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityCameraTestBinding;
-import com.sagereal.factorymode.utils.EnumData;
+import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 import java.io.IOException;
 
@@ -40,11 +41,12 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
         surfaceHolder.addCallback(this);
         binding.btnCameraRevert.setOnClickListener(this);
         binding.btnPass.setOnClickListener(this);
+        binding.btnFail.setOnClickListener(this);
     }
 
     public static void openActivity(Context context) {
         // 检查相机权限
-        if (!PermissionRequestUtil.onRequestSinglePermission(context, Manifest.permission.CAMERA)) {
+        if (!PermissionRequestUtil.requestSinglePermission(context, Manifest.permission.CAMERA)) {
             PermissionRequestUtil.showPermissionDialog(context);
         } else {
             Intent intent = new Intent(context, CameraTestActivity.class);
@@ -54,14 +56,24 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        // 点击反转相机按钮
         if (v.getId() == R.id.btn_camera_revert) {
             revertCamera();
             reverted = true;
+            return;
         } else if (v.getId() == R.id.btn_pass) {
+            // 还未反转过相机
             if (!reverted) {
                 Toast.makeText(this, getString(R.string.camera_cannot_pass), Toast.LENGTH_SHORT).show();
+                return;
+            }else {
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.CAMERA_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.CAMERA_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 
     private void revertCamera() {
@@ -113,7 +125,6 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-        // 不需要实现
     }
 
     @Override

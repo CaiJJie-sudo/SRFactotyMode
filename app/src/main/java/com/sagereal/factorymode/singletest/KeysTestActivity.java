@@ -15,7 +15,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityKeysTestBinding;
-import com.sagereal.factorymode.utils.EnumData;
+import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 /**
  * 测试音量上、音量下和电源物理按键
@@ -49,13 +50,8 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
         binding.btnFail.setOnClickListener(this);
     }
 
-    /**
-     * 使用给定的上下文打开此活动。
-     * @param context 应从中启动活动的上下文。
-     */
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, KeysTestActivity.class);
-        intent.getIntExtra(String.valueOf(EnumData.KEY_POSITION), 0);
         context.startActivity(intent);
     }
     @Override
@@ -63,12 +59,15 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
         if (v.getId() == R.id.btn_pass) {
             if(!allKeysTested()){
                 Toast.makeText(v.getContext(), getString(R.string.key_quit), Toast.LENGTH_SHORT).show();
+                return;
             }else {
-
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 
     /**
@@ -109,6 +108,6 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
     private boolean allKeysTested(){
         return binding.btnKeyVolumeUp.getVisibility() == View.INVISIBLE
                 && binding.btnKeyVolumeDown.getVisibility() == View.INVISIBLE
-                && binding.btnKeyVolumeDown.getVisibility() == View.INVISIBLE;
+                && binding.btnKeyPower.getVisibility() == View.INVISIBLE;
     }
 }

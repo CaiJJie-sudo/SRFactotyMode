@@ -15,7 +15,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityBatteryTestBinding;
-import com.sagereal.factorymode.utils.EnumData;
+import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class BatteryTestActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityBatteryTestBinding binding;
@@ -27,6 +28,7 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
         binding = DataBindingUtil.setContentView(this, R.layout.activity_battery_test);
         initBatteryInfo(); // 初始化时获取全部电池信息
         binding.btnPass.setOnClickListener(this);
+        binding.btnFail.setOnClickListener(this);
     }
 
     /**
@@ -68,7 +70,6 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
 
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, BatteryTestActivity.class);
-        intent.getIntExtra(String.valueOf(EnumData.BATTERY_POSITION), 0);
         context.startActivity(intent);
     }
 
@@ -141,13 +142,23 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
         }
         return 0;
     }
-
+    /**
+     * 处理按钮点击事件并跳转页面
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass){
             if(!batteryIsCharging()){
                 Toast.makeText(v.getContext(), getString(R.string.battery_test_tip), Toast.LENGTH_SHORT).show();
+                return;
+            }else {
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 }

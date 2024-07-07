@@ -1,6 +1,10 @@
 package com.sagereal.factorymode.utils;
 
-public enum EnumData {
+/**
+ * 单项测试枚举类
+ */
+public enum EnumSingleTest {
+    // 单项测试
     BATTERY_POSITION(0),
     VIBRATION_POSITION(1),
     MIKE_POSITION(2),
@@ -10,10 +14,18 @@ public enum EnumData {
     RECEIVER_POSITION(6),
     CAMERA_POSITION(7),
     FLASH_POSITION(8),
-    KEY_POSITION(9);
+    KEY_POSITION(9),
+    SINGLE_TEST_NUM(10),
+
+    // 单项测试状态
+    UNTESTED(-1),
+    TESTED_PASS(1),
+    TESTED_FAIL(0);
+
+
     private final int value;
 
-    EnumData(int value) {
+    EnumSingleTest(int value) {
         this.value = value;
     }
     public int getValue() {

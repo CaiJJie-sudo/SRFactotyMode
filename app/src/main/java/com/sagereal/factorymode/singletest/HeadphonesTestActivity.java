@@ -17,11 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.sagereal.factorymode.DataBinderMapperImpl;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityHeadphonesTestBinding;
-import com.sagereal.factorymode.utils.EnumData;
+import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 import java.io.IOException;
 
@@ -41,6 +41,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         headphonesTestFilePath = getExternalCacheDir().getAbsolutePath() + "/headphonesTestRecording.mp4";
         binding.btnHeadphonesRecord.setOnClickListener(this);
         binding.btnPass.setOnClickListener(this);
+        binding.btnFail.setOnClickListener(this);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
     }
@@ -48,14 +49,21 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         if (v.getId() == R.id.btn_headphones_record) {
             startRecording();
-        }
-        if (v.getId() == R.id.btn_pass){
+            return;
+        } else if (v.getId() == R.id.btn_pass){
             // 未测试或测试中不能点击通过
             if(binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
                     !binding.btnHeadphonesRecord.isEnabled()) {
                 Toast.makeText(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT).show();
+                return;
+            }else {
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.HEADPHONES_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.HEADPHONES_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 
     /**
@@ -76,11 +84,10 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
 
     public static void openActivity(Context context) {
         // 检查录音权限
-        if (!PermissionRequestUtil.onRequestSinglePermission(context, Manifest.permission.RECORD_AUDIO)) {
+        if (!PermissionRequestUtil.requestSinglePermission(context, Manifest.permission.RECORD_AUDIO)) {
             PermissionRequestUtil.showPermissionDialog(context);
         } else {
             Intent intent = new Intent(context, HeadphonesTestActivity.class);
-            intent.getIntExtra(String.valueOf(EnumData.HEADPHONES_POSITION), 0);
             context.startActivity(intent);
         }
     }
@@ -91,17 +98,14 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      */
     private void checkHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        // 未插入耳机
+        // 判断是否插入耳机并进行提示
         if (!audioManager.isWiredHeadsetOn()) {
             Toast.makeText(this, getString(R.string.not_plugged_headphones), Toast.LENGTH_SHORT).show();
             plugHeadphones = false;
-            return;
-        }
-        //当耳机已被插入，则不再又显示提示
-        if (!plugHeadphones){
+        } else if (audioManager.isWiredHeadsetOn() && plugHeadphones == false) {
             Toast.makeText(this, getString(R.string.plugged_headphones), Toast.LENGTH_SHORT).show();
+            plugHeadphones = true;
         }
-        plugHeadphones = true;
     }
 
     /**

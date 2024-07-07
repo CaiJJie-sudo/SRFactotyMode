@@ -26,7 +26,7 @@
     <string name="cancel">取消</string>
     <string name="go_setting">去设置</string>
     <string name="tel_112">tel:112</string>
-    <string name="quit_app">再按一次返回键退出应用</string>
+    <string name="exit">再按一次返回键退出应用</string>
     <string name="battery_test">电池测试</string>
     <string name="vibration_test">振动测试</string>
     <string name="mike_test">麦克测试</string>
@@ -48,8 +48,7 @@
     <string name="battery_level_unit">%</string>
     <string name="voltage_unit">毫伏</string>
     <string name="temperature_unit">度</string>
-    <string name="position">position</string>
-    <string name="sr_factory_mode">sr_factory_mode</string>
+    <string name="single_item_position">position</string>
     <string name="battery_test_tip">未充电不能点击通过</string>
     <string name="vibraion_test_tip">振动测试中，请观察是否正常...</string>
     <string name="mike_test_tip">先点击录音,5秒后将会自动播放录音...</string>
@@ -61,9 +60,10 @@
     <string name="retest">重测</string>
     <string name="begin">开始</string>
     <string name="headphones_test_tip">先插入耳机,然后点击录音，5秒后将会自动播放录音...</string>
-    <string name="speaker_test_tip">喇叭测试中，请关注喇叭是否有声音...</string>
-    <string name="speaker_test_headphones">耳机已插入，已禁止点击通过</string>
-    <string name="receiver_test_tip">听筒测试中，请关注听筒是否有声音...</string>
+    <string name="speaker_test_tip">喇叭测试中，请先确保耳机已被移除，然后关注喇叭是否有声音...</string>
+    <string name="speaker_test_headphones">请移除耳机</string>
+    <string name="speaker_test_no_headphones">耳机已移除</string>
+    <string name="receiver_test_tip">听筒测试中，请先确保耳机已插入，然后关注听筒是否有声音...</string>
     <string name="receiver_test_no_headphones_">未插入耳机，已禁止点击通过</string>
     <string name="front_camera">前摄</string>
     <string name="rear_camera">后摄</string>
@@ -77,6 +77,6 @@
     <string name="cannot_pass_fail">未测试或在测试中不能通过</string>
     <string name="camera_cannot_pass">还未测试结束,请切换摄像头测试后点击通过</string>
     <string name="key_quit">您还未结束测试,不能点击通过</string>
-    <string name="not_test">未测试</string>
+    <string name="untested">未测试</string>
 
 </resources>

@@ -8,6 +8,9 @@ import android.os.StatFs;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+/**
+ * 获取设备基本信息的工具类
+ */
 public class DeviceBasicInfoUtil {
     private static final double GB_TO_BYTES = 1024.0 * 1024.0 * 1024.0;
     private static final int[] ROM_MAP = new int[]{2, 4, 8, 16, 32, 64, 128, 256, 512};

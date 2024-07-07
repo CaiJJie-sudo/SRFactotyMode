@@ -25,7 +25,7 @@
     <string name="cancel"> Cancel </string>
     <string name="go_setting"> Go to settings </string>
     <string name="tel_112">tel:112</string>-->
-    <string name="quit_app">Press the back button again to exit the application.</string>
+    <string name="exit">Press the back button again to exit the application.</string>
     <string name="battery_test">Battery Test</string>
     <string name="vibration_test">Vibration Test</string>
     <string name="mike_test">Mike Test</string>
@@ -47,8 +47,7 @@
     <string name="battery_level_unit">%</string>
     <string name="voltage_unit">mV</string>
     <string name="temperature_unit">℃</string>
-    <string name="position">position</string>
-    <string name="sr_factory_mode">sr_factory_mode</string>
+    <string name="single_item_position">Single Test Item Position</string>
     <string name="battery_test_tip">Uncharged can not click the PASS</string>
     <string name="vibraion_test_tip">Vibration test, please observe whether it is normal...</string>
     <string name="mike_test_tip">Click on the recording button first, and the recording will automatically play after 5 seconds...</string>
@@ -60,9 +59,10 @@
     <string name="retest">Retest</string>
     <string name="begin">BEGIN</string>
     <string name="headphones_test_tip">Plug in the headphones first, then click the recording button, and the recording will automatically play after 5 seconds...</string>
-    <string name="speaker_test_tip">Speaker test, please pay attention to whether the speaker has sound...</string>
-    <string name="speaker_test_headphones">The headphones is plugged in, and click PASS is disabled</string>
-    <string name="receiver_test_tip">Receiver test, please pay attention to whether the headphones has sound...</string>
+    <string name="speaker_test_tip">Speaker test, make sure the headphones is removed first, then pay attention whether the speaker has sound...</string>
+    <string name="speaker_test_headphones">Please remove the headphones</string>
+    <string name="speaker_test_no_headphones">Headphones removed</string>
+    <string name="receiver_test_tip">Receiver test, make sure the headphones is plugged in first, then pay attention to whether the headphones has sound...</string>
     <string name="receiver_test_no_headphones_">The headphones is not plugged in, and click PASS is disabled</string>
     <string name="front_camera">Front Camera</string>
     <string name="rear_camera">Rear Camera</string>
@@ -73,8 +73,8 @@
     <string name="plugged_headphones">The earphones have been plugged in.</string>
     <string name="not_plugged_headphones"> Please insert the headphones.</string>
     <string name="plz_insert_and_test">Please insert your headphones before clicking record.</string>
-    <string name="cannot_pass_fail">Not tested or in testing cannot PASS.</string>
+    <string name="cannot_pass_fail">untested or in testing cannot PASS.</string>
     <string name="camera_cannot_pass">The test is not over yet, please revert the camera to test and click PASS.</string>
     <string name="key_quit">You have not finished the test yet, so you cannot click PASS.</string>
-    <string name="not_test">Not Tested</string>
+    <string name="untested">UNTESTED</string>
 </resources>

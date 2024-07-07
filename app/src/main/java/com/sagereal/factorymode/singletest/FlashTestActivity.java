@@ -13,7 +13,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityFlashTestBinding;
-import com.sagereal.factorymode.utils.EnumData;
+import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class FlashTestActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityFlashTestBinding binding;
@@ -34,15 +35,18 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     }
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, FlashTestActivity.class);
-        intent.getIntExtra(String.valueOf(EnumData.FLASH_POSITION), 0);
         context.startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_pass){
-
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
     @Override
     protected void onResume() {

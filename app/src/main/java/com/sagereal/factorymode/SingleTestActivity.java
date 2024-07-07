@@ -1,7 +1,6 @@
 package com.sagereal.factorymode;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,23 +13,18 @@ import com.sagereal.factorymode.databinding.ActivitySingleTestBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleTestActivity extends AppCompatActivity implements View.OnClickListener {
+public class SingleTestActivity extends AppCompatActivity{
     private ActivitySingleTestBinding binding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_single_test);
-        RecyclerView rvSingleTest = binding.rvSingleTest;
-        SingleTestItemAdapter singleTestItemAdapter = new SingleTestItemAdapter(this, initSingleTestItem());
-        rvSingleTest.setLayoutManager(new LinearLayoutManager(this));
-        rvSingleTest.setAdapter(singleTestItemAdapter);
-        findViewById(R.id.ib_back).setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View view) {
-        finish();
-    }
+    /**
+     * 初始化单项测试数据列表
+     * @return
+     */
     public List<String> initSingleTestItem(){
         List<String> singleTestItemList = new ArrayList<>();
         singleTestItemList.add(getString(R.string.battery_test));
@@ -44,5 +38,17 @@ public class SingleTestActivity extends AppCompatActivity implements View.OnClic
         singleTestItemList.add(getString(R.string.flash_test));
         singleTestItemList.add(getString(R.string.keys_test));
         return singleTestItemList;
+    }
+
+    /**
+     * 当页面可见时刷新 singleTestItem 的状态
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RecyclerView rvSingleTest = binding.rvSingleTest;
+        SingleTestItemAdapter singleTestItemAdapter = new SingleTestItemAdapter(initSingleTestItem());
+        rvSingleTest.setLayoutManager(new LinearLayoutManager(this));
+        rvSingleTest.setAdapter(singleTestItemAdapter);
     }
 }

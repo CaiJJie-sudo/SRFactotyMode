@@ -4,25 +4,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.R;
-import com.sagereal.factorymode.utils.EnumData;
+import com.sagereal.factorymode.databinding.ActivityVibrationTestBinding;
+import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
-public class VibrationTestActivity extends AppCompatActivity {
+public class VibrationTestActivity extends AppCompatActivity implements View.OnClickListener {
     private Vibrator vibrator;
+    private ActivityVibrationTestBinding binding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vibration_test);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_vibration_test);
+        binding.btnPass.setOnClickListener(this);
+        binding.btnFail.setOnClickListener(this);
         // 初始化 Vibrator 对象
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
     public static void openActivity(Context context) {
         Intent intent = new Intent(context, VibrationTestActivity.class);
-        intent.getIntExtra(String.valueOf(EnumData.VIBRATION_POSITION), 0);
         context.startActivity(intent);
     }
 
@@ -56,5 +62,18 @@ public class VibrationTestActivity extends AppCompatActivity {
         if (vibrator != null) {
             vibrator.cancel();
         }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_pass){
+            // 保存数据
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.VIBRATION_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.VIBRATION_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+        }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 }
