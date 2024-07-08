@@ -24,17 +24,21 @@ public class LcdTestActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lcd_test);
-        binding.btnBegin.setOnClickListener(this);
-        binding.lcdLayout.setOnClickListener(this);
-        binding.btnPass.setOnClickListener(this);
-        binding.btnFail.setOnClickListener(this);
+        setOnClickListeners(binding.btnBegin, binding.lcdLayout, binding.btnPass, binding.btnFail);
     }
 
     public static void openActivity(Context context) {
-        Intent intent = new Intent(context, LcdTestActivity.class);
-        context.startActivity(intent);
+        context.startActivity(new Intent(context, LcdTestActivity.class));
     }
 
+    /**
+     * 设置点击事件监听器
+     */
+    private void setOnClickListeners(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
+    }
     @Override
     public void onClick(View v) {
         // 点击开始按钮，开始测试
@@ -59,5 +63,4 @@ public class LcdTestActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     }
-
 }

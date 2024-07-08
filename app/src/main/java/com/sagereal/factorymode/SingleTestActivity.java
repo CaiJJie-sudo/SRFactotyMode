@@ -1,6 +1,7 @@
 package com.sagereal.factorymode;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +14,13 @@ import com.sagereal.factorymode.databinding.ActivitySingleTestBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingleTestActivity extends AppCompatActivity{
+public class SingleTestActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivitySingleTestBinding binding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_single_test);
+        binding.ibBack.setOnClickListener(this);
     }
 
     /**
@@ -50,5 +52,12 @@ public class SingleTestActivity extends AppCompatActivity{
         SingleTestItemAdapter singleTestItemAdapter = new SingleTestItemAdapter(initSingleTestItem());
         rvSingleTest.setLayoutManager(new LinearLayoutManager(this));
         rvSingleTest.setAdapter(singleTestItemAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.ib_back){
+            finish();
+        }
     }
 }

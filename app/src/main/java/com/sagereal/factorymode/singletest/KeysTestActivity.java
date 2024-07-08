@@ -16,12 +16,9 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityKeysTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.FunctionUtils;
+import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
-/**
- * 测试音量上、音量下和电源物理按键
- */
 public class KeysTestActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityKeysTestBinding binding;
@@ -39,10 +36,6 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
         }
     };
 
-    /**
-     * 当活动开始时调用。初始化UI组件并注册点击监听器。
-     * @param savedInstanceState 如果活动重新初始化（例如在之前被关闭后），Bundle包含最近提供的数据。
-     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,23 +45,7 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public static void openActivity(Context context) {
-        Intent intent = new Intent(context, KeysTestActivity.class);
-        context.startActivity(intent);
-    }
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_pass) {
-            if(!allKeysTested()){
-                FunctionUtils.showToast(this, getString(R.string.key_quit), Toast.LENGTH_SHORT);
-                return;
-            }else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
-            }
-        } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
-        }
-        // 跳转至单项测试列表页面
-        onBackPressed();
+        context.startActivity(new Intent(context, KeysTestActivity.class));
     }
 
     /**
@@ -104,11 +81,25 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * 三个物理按键是否都已测试
-     * @return
      */
     private boolean allKeysTested(){
         return binding.btnKeyVolumeUp.getVisibility() == View.INVISIBLE
                 && binding.btnKeyVolumeDown.getVisibility() == View.INVISIBLE
                 && binding.btnKeyPower.getVisibility() == View.INVISIBLE;
+    }
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_pass) {
+            if(!allKeysTested()){
+                ToastUtils.showToast(this, getString(R.string.key_quit), Toast.LENGTH_SHORT);
+                return;
+            }else {
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+            }
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+        }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 }

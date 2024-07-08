@@ -18,7 +18,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivitySpeakerTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.FunctionUtils;
+import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class SpeakerTestActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,8 +38,7 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
     }
 
     public static void openActivity(Context context) {
-        Intent intent = new Intent(context, SpeakerTestActivity.class);
-        context.startActivity(intent);
+        context.startActivity(new Intent(context, SpeakerTestActivity.class));
     }
 
     private void playMusic() {
@@ -86,10 +85,10 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
     private void pluggedHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (!audioManager.isWiredHeadsetOn() && plugHeadphones == true) {
-            FunctionUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
+            ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = false;
         } else if (audioManager.isWiredHeadsetOn()) {
-            FunctionUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
+            ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = true;
         }
     }

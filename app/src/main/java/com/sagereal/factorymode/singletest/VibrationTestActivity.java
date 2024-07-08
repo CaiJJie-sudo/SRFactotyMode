@@ -14,7 +14,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityVibrationTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.FunctionUtils;
+import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class VibrationTestActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,8 +30,7 @@ public class VibrationTestActivity extends AppCompatActivity implements View.OnC
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
     public static void openActivity(Context context) {
-        Intent intent = new Intent(context, VibrationTestActivity.class);
-        context.startActivity(intent);
+        context.startActivity(new Intent(context, VibrationTestActivity.class));
     }
 
     /**
@@ -55,7 +54,7 @@ public class VibrationTestActivity extends AppCompatActivity implements View.OnC
         super.onResume();
         deviceVibraion(vibrator);
         if (!vibrator.hasVibrator()){
-            FunctionUtils.showToast(this, getString(R.string.not_support_vibration), Toast.LENGTH_SHORT);
+            ToastUtils.showToast(this, getString(R.string.not_support_vibration), Toast.LENGTH_SHORT);
         }
     }
     /**
@@ -74,7 +73,7 @@ public class VibrationTestActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass){
             if (!vibrator.hasVibrator()){
-                FunctionUtils.showToast(this, getString(R.string.not_support_vibration), Toast.LENGTH_SHORT);
+                ToastUtils.showToast(this, getString(R.string.not_support_vibration), Toast.LENGTH_SHORT);
                 return;
             }else {
                 // 保存数据

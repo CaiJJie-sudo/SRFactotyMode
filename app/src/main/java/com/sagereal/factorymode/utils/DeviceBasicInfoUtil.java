@@ -38,8 +38,6 @@ public class DeviceBasicInfoUtil {
 
     /**
      * 获取设备的RAM并向上取整返回整型GB
-     * @param context
-     * @return
      */
     private int setmDeviceRam(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -50,7 +48,6 @@ public class DeviceBasicInfoUtil {
 
     /**
      * 获取设备的ROM并向上取整返回整型GB
-     * @return
      */
     private int setDeviceRom() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
@@ -66,8 +63,6 @@ public class DeviceBasicInfoUtil {
 
     /**
      * 获取设备的电池容量
-     * @param context
-     * @return
      */
     private int setBatterySize(Context context) {
         Object powerProfile = null;
@@ -84,8 +79,6 @@ public class DeviceBasicInfoUtil {
 
     /**
      * 获取设备的屏幕尺寸
-     * @param context
-     * @return
      */
     private static double setScreenSize(Context context) {
         DisplayMetrics metrics = getMetrics(context);
@@ -99,8 +92,6 @@ public class DeviceBasicInfoUtil {
 
     /**
      * 获取设备的屏幕分辨率
-     * @param context
-     * @return
      */
     private String setScreenResolution(Context context){
         DisplayMetrics metrics = getMetrics(context);

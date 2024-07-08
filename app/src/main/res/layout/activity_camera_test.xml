@@ -36,7 +36,8 @@
             <SurfaceView
                 android:id="@+id/v_camera_test"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"/>
 
             <android.widget.Button
                 android:id="@+id/btn_camera_revert"

@@ -34,20 +34,9 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
         }
     }
     public static void openActivity(Context context) {
-        Intent intent = new Intent(context, FlashTestActivity.class);
-        context.startActivity(intent);
+        context.startActivity(new Intent(context, FlashTestActivity.class));
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.btn_pass){
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
-        } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
-        }
-        // 跳转至单项测试列表页面
-        onBackPressed();
-    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -73,4 +62,16 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_pass){
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+        } else if (v.getId() == R.id.btn_fail) {
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+        }
+        // 跳转至单项测试列表页面
+        onBackPressed();
+    }
+
 }

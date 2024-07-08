@@ -19,7 +19,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityReceiverTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.FunctionUtils;
+import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class ReceiverTestActivity extends AppCompatActivity implements View.OnClickListener {
@@ -38,8 +38,7 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
         binding.btnFail.setOnClickListener(this);
     }
     public static void openActivity(Context context) {
-        Intent intent = new Intent(context, ReceiverTestActivity.class);
-        context.startActivity(intent);
+        context.startActivity(new Intent(context, ReceiverTestActivity.class));
     }
 
     /**
@@ -82,7 +81,7 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
                 });
             } else {
                 // 处理AudioManager为null的情况
-                FunctionUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
+                ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
             }
         }
     }
@@ -115,10 +114,10 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
     private void pluggedHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (!audioManager.isWiredHeadsetOn() && plugHeadphones == true) {
-            FunctionUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
+            ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = false;
         } else if (audioManager.isWiredHeadsetOn()) {
-            FunctionUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
+            ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = true;
         }
     }
@@ -158,7 +157,6 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
 
     /**
      * 检测设备是否支持听筒
-     * @return
      */
     private boolean supportReceiver(){
         // 获取AudioManager实例
@@ -179,7 +177,7 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
             if(plugHeadphones){
                 return;
             } else if (!supportReceiver()) {
-                FunctionUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
+                ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
                 return;
             } else {
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.RECEIVER_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());

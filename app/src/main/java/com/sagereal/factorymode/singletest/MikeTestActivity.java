@@ -9,8 +9,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.os.Handler;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -20,7 +22,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityMikeTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.FunctionUtils;
+import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
@@ -39,9 +41,8 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_mike_test);
-        binding.btnMikeRecord.setOnClickListener(this);
-        binding.btnPass.setOnClickListener(this);
-        binding.btnFail.setOnClickListener(this);
+        setOnClickListeners(binding.btnMikeRecord, binding.btnPass, binding.btnFail);
+
         mikeAudioFilePath = getExternalCacheDir().getAbsolutePath() + "/mikeTestRecording.mp4";
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
@@ -51,30 +52,10 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
         if (!PermissionRequestUtil.requestSinglePermission(context, Manifest.permission.RECORD_AUDIO)) {
             PermissionRequestUtil.showPermissionDialog(context);
         }else {
-            Intent intent = new Intent(context, MikeTestActivity.class);
-            context.startActivity(intent);
+            context.startActivity(new Intent(context, MikeTestActivity.class));
         }
     }
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_mike_record) {    // 点击录音
-            startRecording();
-            return;
-        } else if (v.getId() == R.id.btn_pass){
-            // 未测试或测试中不能点击通过
-            if(binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
-                    !binding.btnMikeRecord.isEnabled()) {   // 点击测试通过
-                FunctionUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
-                return;
-            }else{
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
-            }
-        } else if (v.getId() == R.id.btn_fail) {    // 点击测试失败
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
-        }
-        // 跳转至单项测试列表页面
-        onBackPressed();
-    }
+
     /**
      * 监听并更改耳机插拔状态变化的广播接收器
      */
@@ -92,16 +73,19 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     }
     /**
      * 检查耳机状态
-     * @return
      */
     private void checkHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 判断是否插入耳机并进行提示
         if (audioManager.isWiredHeadsetOn()) {
-            FunctionUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
+            ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = true;
-        }else if(!audioManager.isWiredHeadsetOn() && plugHeadphones == true) {
-            FunctionUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
+            // 若插入了耳机且在测试中，则刷新该页面
+            if (!binding.btnMikeRecord.isEnabled()) {
+                recreate();
+            }
+        }else if(!audioManager.isWiredHeadsetOn() && plugHeadphones) {
+            ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = false;
         }
     }
@@ -114,6 +98,8 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
         if (plugHeadphones) {
             return;
         }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding.tvMikeRecordTip.setVisibility(View.VISIBLE);
         binding.tvMikeRecordTip.setText(getString(R.string.recording));
         binding.btnMikeRecord.setText(getString(R.string.testing));
@@ -181,5 +167,52 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
         super.onDestroy();
         // 注销耳机插拔状态变化的广播接收器
         unregisterReceiver(headphonesReceiver);
+    }
+
+    /**
+     * 当在测试中时，禁用系统导航键并提示
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (!binding.btnMikeRecord.isEnabled()) {
+            // 在测试中，禁用系统导航键并提示
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                case KeyEvent.KEYCODE_HOME:
+                case KeyEvent.KEYCODE_MENU:
+                    ToastUtils.showToast(this, getString(R.string.testing_disabled_exit), Toast.LENGTH_SHORT);
+                    return true; // 拦截事件，不让系统处理
+            }
+        }
+        // 如果不处理该按键事件，则调用父类方法
+        return super.onKeyDown(keyCode, event);
+    }
+    /**
+     * 设置点击事件监听器
+     */
+    private void setOnClickListeners(View... views) {
+        for (View view : views) {
+            view.setOnClickListener(this);
+        }
+    }
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_mike_record) {    // 点击录音
+            startRecording();
+            return;
+        } else if (v.getId() == R.id.btn_pass){
+            // 未测试或测试中不能点击通过
+            if(binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
+                    !binding.btnMikeRecord.isEnabled()) {
+                ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
+                return;
+            }else{
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+            }
+        } else if (v.getId() == R.id.btn_fail) {    // 点击测试失败
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+        }
+        // 跳转至单项测试列表页面
+        onBackPressed();
     }
 }

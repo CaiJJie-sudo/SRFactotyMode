@@ -3,6 +3,7 @@ package com.sagereal.factorymode;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,12 +12,13 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.databinding.ActivityReportBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityReportBinding binding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_report);
+        binding.ibBack.setOnClickListener(this);
         getData();
     }
 
@@ -44,6 +46,13 @@ public class ReportActivity extends AppCompatActivity {
             } else if (value == EnumSingleTest.UNTESTED.getValue()) {
                 binding.tvUntested.append(singleTestName[i] + "\n\n");
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.ib_back){
+            finish();
         }
     }
 }
