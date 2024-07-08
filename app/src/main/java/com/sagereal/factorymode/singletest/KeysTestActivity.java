@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityKeysTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.FunctionUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 /**
@@ -58,7 +59,7 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass) {
             if(!allKeysTested()){
-                Toast.makeText(v.getContext(), getString(R.string.key_quit), Toast.LENGTH_SHORT).show();
+                FunctionUtils.showToast(this, getString(R.string.key_quit), Toast.LENGTH_SHORT);
                 return;
             }else {
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());

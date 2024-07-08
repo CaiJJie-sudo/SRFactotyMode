@@ -14,25 +14,27 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.databinding.ActivityMainBinding;
 import com.sagereal.factorymode.utils.DeviceBasicInfoUtil;
+import com.sagereal.factorymode.utils.FunctionUtils;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private ActivityMainBinding binding;
     private DeviceBasicInfoUtil deviceBasicInfoUtil;
     private boolean doubleBackToExit = false;   // 双击返回键退出程序
+    //请求权限
     private static final int PERMISSIONS_REQUEST_CODE = 1;
-    private static final String[] PERMISSIONS_REQUIRED = {
+    private final String[] mPermissions = {
             Manifest.permission.CAMERA,
-            Manifest.permission.CALL_PHONE,
-            Manifest.permission.RECORD_AUDIO
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CALL_PHONE
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +49,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         binding.btnReport.setOnClickListener(this);
 
         initHomePage();
-        // 检查所有必需的权限是否已经授权
-        if (!hasPermissions()) {
-            // 请求权限
-            ActivityCompat.requestPermissions(this, PERMISSIONS_REQUIRED, PERMISSIONS_REQUEST_CODE);
+        //检查权限是否授权
+        if (!checkPermissions()) {
+            //请求权限
+            ActivityCompat.requestPermissions(this, mPermissions, PERMISSIONS_REQUEST_CODE);
+        }
+
+    }
+    // 检查所有权限
+    private boolean checkPermissions() {
+        for (String permission : mPermissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+    // 处理权限请求的结果
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean allPermissionsGranted = true;
+        if (requestCode == PERMISSIONS_REQUEST_CODE) {
+            // 检查每一项权限是否都已授权
+            for (int grantResult : grantResults) {
+                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+        }
+        if(!allPermissionsGranted){
+            PermissionRequestUtil.showPermissionDialog(this);
         }
     }
 
@@ -124,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         doubleBackToExit = true;
-        Toast.makeText(this, getString(R.string.exit), Toast.LENGTH_SHORT).show();
+        FunctionUtils.showToast(this, getString(R.string.exit), Toast.LENGTH_SHORT);
         // 在 2s 内用户再次点击返回键，则退出程序
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -134,34 +165,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, 2000);
     }
 
-    // 检查是否拥有所有必需的权限
-    private boolean hasPermissions() {
-        for (String permission : PERMISSIONS_REQUIRED) {
-            if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // 处理权限请求的结果
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.length > 0) {
-                boolean allPermissionsGranted = true;
-                for (int grantResult : grantResults) {
-                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                        allPermissionsGranted = false;
-                        break;
-                    }
-                }
-                if (!allPermissionsGranted) {
-                    PermissionRequestUtil.showPermissionDialog(this);
-                }
-            }
-        }
-    }
 
 }

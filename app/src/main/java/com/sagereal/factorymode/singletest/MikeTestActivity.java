@@ -20,6 +20,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityMikeTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.FunctionUtils;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
@@ -63,7 +64,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
             // 未测试或测试中不能点击通过
             if(binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
                     !binding.btnMikeRecord.isEnabled()) {   // 点击测试通过
-                Toast.makeText(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT).show();
+                FunctionUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             }else{
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
@@ -97,10 +98,10 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 判断是否插入耳机并进行提示
         if (audioManager.isWiredHeadsetOn()) {
-            Toast.makeText(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT).show();
+            FunctionUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = true;
         }else if(!audioManager.isWiredHeadsetOn() && plugHeadphones == true) {
-            Toast.makeText(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT).show();
+            FunctionUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = false;
         }
     }

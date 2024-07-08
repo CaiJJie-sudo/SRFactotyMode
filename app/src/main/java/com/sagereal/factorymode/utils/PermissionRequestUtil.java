@@ -16,6 +16,7 @@ import com.sagereal.factorymode.R;
  * 权限处理工具类
  */
 public class PermissionRequestUtil {
+
     /**
      * 处理单个权限请求并返回结果
      * @param context

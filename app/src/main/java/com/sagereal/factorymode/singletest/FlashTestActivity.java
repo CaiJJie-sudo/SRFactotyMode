@@ -19,7 +19,7 @@ import com.sagereal.factorymode.utils.SharePreferenceUtils;
 public class FlashTestActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityFlashTestBinding binding;
     private CameraManager cameraManager;
-    private String cameraId;
+    private String[] cameraId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +28,7 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
         binding.btnFail.setOnClickListener(this);
         cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
         try {
-            cameraId = cameraManager.getCameraIdList()[1]; // 获取第前置摄像头的ID
+            cameraId = cameraManager.getCameraIdList(); // 获取所有摄像头的ID
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -52,8 +52,10 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     protected void onResume() {
         super.onResume();
         try {
-            // 打开闪光灯
-            cameraManager.setTorchMode(cameraId, true);
+            // 打开所有闪光灯
+            for (String flashId : cameraId){
+                cameraManager.setTorchMode(flashId, true);
+            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -63,8 +65,10 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     protected void onPause() {
         super.onPause();
         try {
-            // 关闭闪光灯
-            cameraManager.setTorchMode(cameraId, false);
+            for (String flashId : cameraId){
+                // 关闭闪光灯
+                cameraManager.setTorchMode(flashId, false);
+            }
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }

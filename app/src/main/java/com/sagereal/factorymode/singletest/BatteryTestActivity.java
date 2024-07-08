@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityBatteryTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.FunctionUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class BatteryTestActivity extends AppCompatActivity implements View.OnClickListener {
@@ -150,7 +151,7 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass){
             if(!batteryIsCharging()){
-                Toast.makeText(v.getContext(), getString(R.string.battery_test_tip), Toast.LENGTH_SHORT).show();
+                FunctionUtils.showToast(this, getString(R.string.battery_test_tip), Toast.LENGTH_SHORT);
                 return;
             }else {
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());

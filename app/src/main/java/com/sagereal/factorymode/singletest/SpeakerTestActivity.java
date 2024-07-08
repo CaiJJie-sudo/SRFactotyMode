@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivitySpeakerTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.FunctionUtils;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 public class SpeakerTestActivity extends AppCompatActivity implements View.OnClickListener {
@@ -85,10 +86,10 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
     private void pluggedHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (!audioManager.isWiredHeadsetOn() && plugHeadphones == true) {
-            Toast.makeText(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT).show();
+            FunctionUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = false;
         } else if (audioManager.isWiredHeadsetOn()) {
-            Toast.makeText(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT).show();
+            FunctionUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = true;
         }
     }

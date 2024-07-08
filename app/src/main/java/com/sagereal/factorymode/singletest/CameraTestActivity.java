@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityCameraTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.FunctionUtils;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
 import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
@@ -31,6 +32,9 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
     private SurfaceHolder surfaceHolder;
     private int cameraStatus = Camera.CameraInfo.CAMERA_FACING_BACK; // 默认后置摄像头
     private boolean reverted = false;   // 是否切换过相机
+    private static final long CLICK_INTERVAL = 2000; // 限制的点击间隔，单位毫秒
+    private long lastClickTime = 0; // 记录上次点击时间戳
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,13 +62,24 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         // 点击反转相机按钮
         if (v.getId() == R.id.btn_camera_revert) {
+            // 检查是否在限制时间内连续点击
+            if (System.currentTimeMillis() - lastClickTime < CLICK_INTERVAL) {
+                // 提示用户不能连续点击
+                FunctionUtils.showToast(this, getString(R.string.disable_quick_clicks), Toast.LENGTH_SHORT);
+                return;
+            }
+            // 更新上次点击时间
+            lastClickTime = System.currentTimeMillis();
+
+            // 反转相机
             revertCamera();
             reverted = true;
             return;
+
         } else if (v.getId() == R.id.btn_pass) {
             // 还未反转过相机
             if (!reverted) {
-                Toast.makeText(this, getString(R.string.camera_cannot_pass), Toast.LENGTH_SHORT).show();
+                FunctionUtils.showToast(this, getString(R.string.camera_cannot_pass), Toast.LENGTH_SHORT);
                 return;
             }else {
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.CAMERA_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
@@ -74,6 +89,7 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
         }
         // 跳转至单项测试列表页面
         onBackPressed();
+
     }
 
     private void revertCamera() {
@@ -117,6 +133,7 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
             camera = null;
         }
     }
+
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
