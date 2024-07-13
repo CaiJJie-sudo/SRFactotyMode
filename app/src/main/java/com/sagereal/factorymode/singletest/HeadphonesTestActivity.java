@@ -33,6 +33,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     private MediaPlayer mediaPlayer;
     private String headphonesTestFilePath; // 录音文件存放位置
     private boolean plugHeadphones = false;// 耳机插拔状态
+    private boolean testOver = false;   // 是否测试完毕
 
     private BroadcastReceiver headphonesReceiver;
 
@@ -44,6 +45,15 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         setOnClickListeners(binding.btnHeadphonesRecord, binding.btnPass, binding.btnFail);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
+    }
+
+    public static void openActivity(Context context) {
+        // 检查录音权限
+        if (!PermissionRequestUtil.requestSinglePermission(context, Manifest.permission.RECORD_AUDIO)) {
+            PermissionRequestUtil.showPermissionDialog(context);
+        } else {
+            context.startActivity(new Intent(context, HeadphonesTestActivity.class));
+        }
     }
 
     /**
@@ -62,17 +72,8 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         registerReceiver(headphonesReceiver, filter);
     }
 
-    public static void openActivity(Context context) {
-        // 检查录音权限
-        if (!PermissionRequestUtil.requestSinglePermission(context, Manifest.permission.RECORD_AUDIO)) {
-            PermissionRequestUtil.showPermissionDialog(context);
-        } else {
-            context.startActivity(new Intent(context, HeadphonesTestActivity.class));
-        }
-    }
-
     /**
-     * 检查是否插入耳机
+     * 检查耳机状态
      */
     private void checkHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -80,6 +81,10 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         if (!audioManager.isWiredHeadsetOn()) {
             ToastUtils.showToast(this, getString(R.string.not_plugged_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = false;
+            // 若没有插入耳机且在测试中，则刷新该页面
+            if(!binding.btnHeadphonesRecord.isEnabled()){
+                recreate();
+            }
         } else if (audioManager.isWiredHeadsetOn() && plugHeadphones == false) {
             ToastUtils.showToast(this, getString(R.string.plugged_headphones), Toast.LENGTH_SHORT);
             plugHeadphones = true;
@@ -90,10 +95,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 开始录音
      */
     private void startRecording() {
-        checkHeadphones();
-        if (!plugHeadphones) {
-            return;
-        }
+        testOver = false;
         binding.tvMikeRecordTip.setVisibility(View.VISIBLE);
         binding.tvMikeRecordTip.setText(getString(R.string.recording));
         binding.btnHeadphonesRecord.setText(getString(R.string.testing));
@@ -151,6 +153,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
                 binding.tvMikeRecordTip.setText(R.string.record_test_finish);
                 binding.btnHeadphonesRecord.setText(R.string.retest);
                 binding.btnHeadphonesRecord.setEnabled(true);
+                testOver = true;
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -163,20 +166,6 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         // 注销耳机插拔状态变化的广播接收器
         unregisterReceiver(headphonesReceiver);
     }
-    // 当在测试中时，禁用系统导航键并提示
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_MENU) {
-            // 在测试中
-            if (binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
-                    !binding.btnHeadphonesRecord.isEnabled()) {
-                ToastUtils.showToast(this, getString(R.string.testing_disabled_exit), Toast.LENGTH_SHORT);
-                return true;
-            }
-        }
-        // 如果不处理该按键事件，则调用父类方法
-        return super.onKeyDown(keyCode, event);
-    }
     /**
      * 设置点击事件监听器
      */
@@ -187,13 +176,16 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     }
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_headphones_record) {
+        if (v.getId() == R.id.btn_headphones_record) {  // 点击录音
+            checkHeadphones();
+            if (!plugHeadphones) {
+                return;
+            }
             startRecording();
             return;
         } else if (v.getId() == R.id.btn_pass){
             // 未测试或测试中不能点击通过
-            if(binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
-                    !binding.btnHeadphonesRecord.isEnabled()) {
+            if(!testOver) {
                 ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             }else {

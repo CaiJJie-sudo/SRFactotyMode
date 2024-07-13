@@ -35,6 +35,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     private String mikeAudioFilePath; // 录音文件存放位置
     private boolean plugHeadphones = false;   // 耳机插拔状态
     private BroadcastReceiver headphonesReceiver;
+    private boolean testOver = false;   // 是否测试完毕
 
 
     @Override
@@ -94,10 +95,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      * 开始录音
      */
     private void startRecording() {
-        checkHeadphones();
-        if (plugHeadphones) {
-            return;
-        }
+        testOver = false;
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         binding.tvMikeRecordTip.setVisibility(View.VISIBLE);
@@ -155,6 +153,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
                 binding.tvMikeRecordTip.setText(R.string.record_test_finish);
                 binding.btnMikeRecord.setText(R.string.retest);
                 binding.btnMikeRecord.setEnabled(true);
+                testOver = true;
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -170,24 +169,6 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * 当在测试中时，禁用系统导航键并提示
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (!binding.btnMikeRecord.isEnabled()) {
-            // 在测试中，禁用系统导航键并提示
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_BACK:
-                case KeyEvent.KEYCODE_HOME:
-                case KeyEvent.KEYCODE_MENU:
-                    ToastUtils.showToast(this, getString(R.string.testing_disabled_exit), Toast.LENGTH_SHORT);
-                    return true; // 拦截事件，不让系统处理
-            }
-        }
-        // 如果不处理该按键事件，则调用父类方法
-        return super.onKeyDown(keyCode, event);
-    }
-    /**
      * 设置点击事件监听器
      */
     private void setOnClickListeners(View... views) {
@@ -198,12 +179,15 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_mike_record) {    // 点击录音
+            checkHeadphones();
+            if (plugHeadphones) {
+                return;
+            }
             startRecording();
             return;
         } else if (v.getId() == R.id.btn_pass){
             // 未测试或测试中不能点击通过
-            if(binding.tvMikeRecordTip.getVisibility() == View.INVISIBLE ||
-                    !binding.btnMikeRecord.isEnabled()) {
+            if(!testOver) {
                 ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             }else{
