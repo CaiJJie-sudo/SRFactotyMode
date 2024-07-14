@@ -211,10 +211,10 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
                 ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) { // 点击测试失败
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.MIKE_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

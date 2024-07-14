@@ -57,13 +57,13 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * 监听电池状态变化的广播，当电池状态发生变化时，刷新电池信息。
+     * 监听电池充电状态变化的广播
      */
     private final BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-                getBatteryChargingStatus(); // 收到广播时更新电池状态信息
+                chargerChange();
             }
         }
     };
@@ -79,17 +79,17 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
      * 获取全部电池信息并设置对应 textView 的内容。
      */
     private void initBatteryInfo() {
-        getBatteryChargingStatus();
+        chargerChange();
         binding.tvBatteryLevel.setText(String.valueOf(batteryLevel()) + getString(R.string.battery_level_unit));
-        binding.tvBatteryVoltage.setText(String.valueOf(batteryVoltage()) + getString(R.string.voltage_unit));
         binding.tvBatteryTemperature.setText(String.valueOf(batteryTemperature()) + getString(R.string.temperature_unit));
     }
 
     /**
-     * 只更新电池状态
+     * 插拔充电器时更新能骤变的充电状态和电压（电量和电池温度不随着充电器的插拔而改变）
      */
-    private void getBatteryChargingStatus() {
+    private void chargerChange() {
         binding.tvBatteryChargeStatus.setText(batteryIsCharging() ? getString(R.string.is_charging) : getString(R.string.no_charging));
+        binding.tvBatteryVoltage.setText(String.valueOf(batteryVoltage()) + getString(R.string.voltage_unit));
     }
 
     /**
@@ -154,11 +154,11 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
             if (!batteryIsCharging()) {
                 ToastUtils.showToast(this, getString(R.string.battery_test_tip), Toast.LENGTH_SHORT);
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_BATTERY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
                 finish();
             }
         } else if (id == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_BATTERY.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
             finish();
         }
     }

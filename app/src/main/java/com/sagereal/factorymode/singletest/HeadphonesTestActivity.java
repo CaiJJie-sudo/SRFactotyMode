@@ -201,10 +201,10 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
                 ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             }else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.HEADPHONES_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_HEADPHONES.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.HEADPHONES_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_HEADPHONES.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

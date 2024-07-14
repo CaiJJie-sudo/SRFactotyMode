@@ -72,6 +72,7 @@
     <string name="key_volume_up">Volume Up Key</string>
     <string name="key_volume_down">Volume Down Key</string>
     <string name="key_power">Power Key</string>
+    <string name="keys_test_tip">Keys test, please press the physical Volume Up Key, Volume Down Key and Power Key...</string>
     <string name="plugged_headphones">The earphones have been plugged in.</string>
     <string name="not_plugged_headphones"> Please insert the headphones.</string>
     <string name="plz_insert_and_test">Please insert your headphones before clicking record.</string>

@@ -94,10 +94,10 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
                 ToastUtils.showToast(this, getString(R.string.key_quit), Toast.LENGTH_SHORT);
                 return;
             }else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

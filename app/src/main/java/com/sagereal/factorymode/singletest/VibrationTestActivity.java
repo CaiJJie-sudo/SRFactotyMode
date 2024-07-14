@@ -77,10 +77,10 @@ public class VibrationTestActivity extends AppCompatActivity implements View.OnC
                 return;
             }else {
                 // 保存数据
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.VIBRATION_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_VIBRATION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.VIBRATION_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_VIBRATION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

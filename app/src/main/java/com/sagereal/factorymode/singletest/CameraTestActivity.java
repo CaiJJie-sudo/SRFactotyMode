@@ -141,11 +141,11 @@ public class CameraTestActivity extends AppCompatActivity implements View.OnClic
             if (!reverted) {
                 ToastUtils.showToast(this, getString(R.string.camera_cannot_pass), Toast.LENGTH_SHORT);
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.CAMERA_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_CAMERA.getValue(), EnumSingleTest.TESTED_PASS.getValue());
                 finish();
             }
         } else if (id == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.CAMERA_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_CAMERA.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
             finish();
         }
     }

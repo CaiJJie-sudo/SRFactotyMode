@@ -152,10 +152,10 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
             if (plugHeadphones) {
                 return;
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.SPEAKER_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_SPEAKER.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.SPEAKER_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_SPEAKER.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

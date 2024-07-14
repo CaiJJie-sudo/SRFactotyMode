@@ -66,9 +66,9 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_pass){
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_FLASH.getValue(), EnumSingleTest.TESTED_PASS.getValue());
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_FLASH.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

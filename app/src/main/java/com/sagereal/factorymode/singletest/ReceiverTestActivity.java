@@ -206,10 +206,10 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
                 ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
                 return;
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.RECEIVER_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_RECEIVER.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.RECEIVER_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_RECEIVER.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

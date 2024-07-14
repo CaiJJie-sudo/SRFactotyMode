@@ -73,6 +73,7 @@
     <string name="key_volume_up">音量上键</string>
     <string name="key_volume_down">音量下键</string>
     <string name="key_power">电源键</string>
+    <string name="keys_test_tip">按键测试中，请按动物理音量上键、音量下键和电源键...</string>
     <string name="plugged_headphones">耳机已插入</string>
     <string name="not_plugged_headphones">请插入耳机</string>
     <string name="plz_insert_and_test">请插入耳机之后再点击录音</string>
