@@ -71,7 +71,7 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.FLASH_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
-        onBackPressed();
+        finish();
     }
 
 }

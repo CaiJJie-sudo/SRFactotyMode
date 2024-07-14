@@ -25,12 +25,14 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
     private ActivitySpeakerTestBinding binding;
     private MediaPlayer mediaPlayer;
     private BroadcastReceiver headphonesReceiver;
-    private boolean plugHeadphones = false;// 耳机插拔状态
+    private boolean plugHeadphones = false; // 耳机插拔状态
+    private AudioManager audioManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_speaker_test);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
         binding.btnPass.setOnClickListener(this);
@@ -43,9 +45,19 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
 
     private void playMusic() {
         releaseMediaPlayer();
-        if (plugHeadphones){
+        if (plugHeadphones) {
             return;
         }
+
+        // 检查音量是否为零，如果是，设置音量为最大值的一半
+        if (audioManager != null) {
+            if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
+                        AudioManager.FLAG_SHOW_UI);
+            }
+        }
+
         // 创建MediaPlayer并设置要播放的音乐文件
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         if (mediaPlayer != null) {
@@ -58,6 +70,7 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
             mediaPlayer.start();
         }
     }
+
     /**
      * 监听并更改耳机插拔状态变化的广播接收器
      */
@@ -67,9 +80,9 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
             public void onReceive(Context context, Intent intent) {
                 if (intent.hasExtra("state")) {
                     pluggedHeadphones();
-                    if(!plugHeadphones){
+                    if (!plugHeadphones) {
                         playMusic();
-                    }else {
+                    } else {
                         releaseMediaPlayer();
                     }
                 }
@@ -78,20 +91,24 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
         registerReceiver(headphonesReceiver, filter);
     }
+
     /**
      * 检查耳机插入状态
+     *
      * @return true: 有耳机 false : 无耳机
      */
     private void pluggedHeadphones() {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (!audioManager.isWiredHeadsetOn() && plugHeadphones == true) {
-            ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
-            plugHeadphones = false;
-        } else if (audioManager.isWiredHeadsetOn()) {
-            ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
-            plugHeadphones = true;
+        if (audioManager != null) {
+            if (!audioManager.isWiredHeadsetOn() && plugHeadphones) {
+                ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
+                plugHeadphones = false;
+            } else if (audioManager.isWiredHeadsetOn()) {
+                ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
+                plugHeadphones = true;
+            }
         }
     }
+
     /**
      * 当页面可见时播放音乐
      */
@@ -116,6 +133,7 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
         // 注销耳机插拔状态变化的广播接收器
         unregisterReceiver(headphonesReceiver);
     }
+
     /**
      * 释放MediaPlayer资源
      */
@@ -128,18 +146,18 @@ public class SpeakerTestActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_pass){
+        if (v.getId() == R.id.btn_pass) {
             pluggedHeadphones();
             // 当耳机被插入，则点击PASS时进行提示
-            if(plugHeadphones){
+            if (plugHeadphones) {
                 return;
-            }else {
+            } else {
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.SPEAKER_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
-        }else if (v.getId() == R.id.btn_fail) {
+        } else if (v.getId() == R.id.btn_fail) {
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.SPEAKER_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
-        onBackPressed();
+        finish();
     }
 }

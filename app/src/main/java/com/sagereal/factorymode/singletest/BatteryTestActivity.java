@@ -155,11 +155,11 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
                 ToastUtils.showToast(this, getString(R.string.battery_test_tip), Toast.LENGTH_SHORT);
             } else {
                 SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
-                onBackPressed();
+                finish();
             }
         } else if (id == R.id.btn_fail) {
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.BATTERY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
-            onBackPressed();
+            finish();
         }
     }
 }

@@ -56,11 +56,12 @@ public class LcdTestActivity extends AppCompatActivity implements View.OnClickLi
         } else if(v.getId() == R.id.btn_pass) { // 测试通过
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.LCD_POSITION.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             // 跳转至单项测试列表页面
-            onBackPressed();
+            finish();
         }else if(v.getId() == R.id.btn_fail){   // 测试失败
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.LCD_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
-            onBackPressed();
+            finish();
         }
+
 
     }
 }

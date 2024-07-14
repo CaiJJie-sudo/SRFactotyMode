@@ -1,6 +1,4 @@
 package com.sagereal.factorymode;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import com.sagereal.factorymode.singletest.ReceiverTestActivity;
 import com.sagereal.factorymode.singletest.SpeakerTestActivity;
 import com.sagereal.factorymode.singletest.VibrationTestActivity;
 import com.sagereal.factorymode.utils.EnumSingleTest;
+import com.sagereal.factorymode.utils.SharePreferenceUtils;
 
 import java.util.List;
 
@@ -65,46 +64,46 @@ public class SingleTestItemAdapter extends RecyclerView.Adapter<SingleTestItemAd
         holder.bind(singleTestItem);
 
         // 测试通过显示绿色，测试失败显示红色，否则默认没有颜色
-        SharedPreferences sharePreference = holder.itemView.getContext().getSharedPreferences(holder.itemView.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
-        int singleTestStatus = sharePreference.getInt(holder.itemView.getResources().getString(R.string.single_item_position) + position, EnumSingleTest.UNTESTED.getValue());
+        int singleTestStatus = SharePreferenceUtils.getData(holder.itemView.getContext(), position, EnumSingleTest.UNTESTED.getValue());
         if (singleTestStatus == EnumSingleTest.TESTED_PASS.getValue()){
             holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.green));
         } else if (singleTestStatus == EnumSingleTest.TESTED_FAIL.getValue()) {
             holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.red));
         }
 
+
         // 设置每一项的点击事件
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.getAdapterPosition() == EnumSingleTest.BATTERY_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_BATTERY.getValue()){
                     BatteryTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.VIBRATION_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_VIBRATION.getValue()){
                     VibrationTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.MIKE_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_MIKE.getValue()){
                     MikeTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.HEADPHONES_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_HEADPHONES.getValue()){
                     HeadphonesTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.LCD_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_LCD.getValue()){
                     LcdTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.SPEAKER_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_SPEAKER.getValue()){
                     SpeakerTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.RECEIVER_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_RECEIVER.getValue()){
                     ReceiverTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() ==  EnumSingleTest.CAMERA_POSITION.getValue()){
+                if (holder.getAdapterPosition() ==  EnumSingleTest.POSITION_CAMERA.getValue()){
                     CameraTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.FLASH_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_FLASH.getValue()){
                     FlashTestActivity.openActivity(holder.itemView.getContext());
                 }
-                if (holder.getAdapterPosition() == EnumSingleTest.KEY_POSITION.getValue()){
+                if (holder.getAdapterPosition() == EnumSingleTest.POSITION_KEY.getValue()){
                     KeysTestActivity.openActivity(holder.itemView.getContext());
                 }
             }

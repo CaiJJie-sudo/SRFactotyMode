@@ -10,7 +10,6 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,10 +31,11 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     private MediaRecorder mediaRecorder;
     private MediaPlayer mediaPlayer;
     private String headphonesTestFilePath; // 录音文件存放位置
-    private boolean plugHeadphones = false;// 耳机插拔状态
-    private boolean testOver = false;   // 是否测试完毕
+    private boolean plugHeadphones = false; // 耳机插拔状态
+    private boolean testOver = false; // 是否测试完毕
 
     private BroadcastReceiver headphonesReceiver;
+    private AudioManager audioManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         binding = DataBindingUtil.setContentView(this, R.layout.activity_headphones_test);
         headphonesTestFilePath = getExternalCacheDir().getAbsolutePath() + "/headphonesTestRecording.mp4";
         setOnClickListeners(binding.btnHeadphonesRecord, binding.btnPass, binding.btnFail);
+
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
     }
@@ -76,18 +78,19 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 检查耳机状态
      */
     private void checkHeadphones() {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 判断是否插入耳机并进行提示
-        if (!audioManager.isWiredHeadsetOn()) {
-            ToastUtils.showToast(this, getString(R.string.not_plugged_headphones), Toast.LENGTH_SHORT);
-            plugHeadphones = false;
-            // 若没有插入耳机且在测试中，则刷新该页面
-            if(!binding.btnHeadphonesRecord.isEnabled()){
-                recreate();
+        if (audioManager != null) {
+            if (!audioManager.isWiredHeadsetOn()) {
+                ToastUtils.showToast(this, getString(R.string.not_plugged_headphones), Toast.LENGTH_SHORT);
+                plugHeadphones = false;
+                // 若没有插入耳机且在测试中，则刷新该页面
+                if (!binding.btnHeadphonesRecord.isEnabled()) {
+                    recreate();
+                }
+            } else if (audioManager.isWiredHeadsetOn() && !plugHeadphones) {
+                ToastUtils.showToast(this, getString(R.string.plugged_headphones), Toast.LENGTH_SHORT);
+                plugHeadphones = true;
             }
-        } else if (audioManager.isWiredHeadsetOn() && plugHeadphones == false) {
-            ToastUtils.showToast(this, getString(R.string.plugged_headphones), Toast.LENGTH_SHORT);
-            plugHeadphones = true;
         }
     }
 
@@ -119,7 +122,6 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
             }, 5000); // 5秒后停止录音
         } catch (IOException e) {
             e.printStackTrace();
-            // 添加日志输出或其他处理
         }
     }
 
@@ -144,6 +146,14 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         try {
             mediaPlayer.setDataSource(headphonesTestFilePath);
             mediaPlayer.prepare();
+
+            // 检查音量是否为零，如果是，设置音量为最大值的一半
+            if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
+                        AudioManager.FLAG_SHOW_UI);
+            }
+
             mediaPlayer.start();
             binding.tvMikeRecordTip.setText(R.string.record_playing);
             // 播放完成
@@ -166,6 +176,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         // 注销耳机插拔状态变化的广播接收器
         unregisterReceiver(headphonesReceiver);
     }
+
     /**
      * 设置点击事件监听器
      */
@@ -174,6 +185,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
             view.setOnClickListener(this);
         }
     }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_headphones_record) {  // 点击录音
@@ -195,6 +207,6 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.HEADPHONES_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
-        onBackPressed();
+        finish();
     }
 }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
 
 /**
@@ -78,33 +79,49 @@ public class DeviceBasicInfoUtil {
     }
 
     /**
+     * 获取设备的屏幕分辨率
+     */
+    public static String setScreenResolution(Context context) {
+        DisplayMetrics metrics = getMetrics(context);
+        int widthPixels = metrics.widthPixels;
+        int heightPixels = metrics.heightPixels;
+
+        return widthPixels + " x " + heightPixels;
+
+    }
+
+    /**
      * 获取设备的屏幕尺寸
      */
-    private static double setScreenSize(Context context) {
+    public static double setScreenSize(Context context) {
         DisplayMetrics metrics = getMetrics(context);
+        float widthPixels = metrics.widthPixels;
+        float heightPixels = metrics.heightPixels;
+        float xdpi = metrics.xdpi;
+        float ydpi = metrics.ydpi;
+
         // 获取屏幕物理尺寸（英寸 = 像素值 / 每英寸的距离中的像素）
-        float widthInches = metrics.widthPixels / metrics.xdpi;
-        float heightInches = metrics.heightPixels / metrics.ydpi;
+        float widthInches = widthPixels / xdpi;
+        float heightInches = heightPixels / ydpi;
+
         // 返回对角线尺寸（保留两位小数）
         double screenSize = Math.sqrt(Math.pow(widthInches, 2) + Math.pow(heightInches, 2));
         return Math.round(screenSize * 100.0) / 100.0;
     }
 
-    /**
-     * 获取设备的屏幕分辨率
-     */
-    private String setScreenResolution(Context context){
-        DisplayMetrics metrics = getMetrics(context);
-        // 获取屏幕物理尺寸（英寸 = 像素值 / 每英寸的距离中的像素）
-        return String.format(String.valueOf(metrics.widthPixels) + " x " + String.valueOf(metrics.heightPixels));
-    }
-
-    private static DisplayMetrics getMetrics(Context context){
+    private static DisplayMetrics getMetrics(Context context) {
         DisplayMetrics metrics = new DisplayMetrics();
+        // 获取 WindowManager 系统服务
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
+        if (windowManager != null) {
+            Display display = windowManager.getDefaultDisplay();
+            // 将屏幕的实际度量信息存储到 metrics 对象中
+            display.getRealMetrics(metrics);
+        }
         return metrics;
     }
+
+
     public String getDeviceName() {
         return deviceName;
     }

@@ -100,6 +100,6 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.KEY_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
-        onBackPressed();
+        finish();
     }
 }

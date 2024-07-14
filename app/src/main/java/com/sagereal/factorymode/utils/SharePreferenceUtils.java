@@ -6,16 +6,30 @@ import android.content.SharedPreferences;
 import com.sagereal.factorymode.R;
 
 /**
- * 管理单项测试数据保存工具类
+ * 管理单项测试数据保存和读取
  */
 public class SharePreferenceUtils {
+    private static final String PREFS_NAME = "sr_factory_mode_shared_prefs"; // 定义 SharedPreferences 文件的名称
+    private static final String PREFIX = "single_item_position_"; // 定义键值前缀
+
+    /**
+     * 保存测试数据
+     */
     public static void saveData(Context context, int position, int result){
-        // 获取一个特定名称和模式的 SharedPreferences 对象，在应用程序中存储和管理数据, 文件只能被当前应用程序访问。
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getResources().getString(R.string.app_name), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        // 将指定位置 (position) 的测试结果 (result) 存储到 SharedPreferences 中
-        editor.putInt(context.getResources().getString(R.string.single_item_position) + position, result);
-        // 提交修改
+        editor.putInt(PREFIX + position, result); // 将测试结果 result 存储到由前缀和位置组成的键值中
         editor.apply();
     }
+
+    /**
+     * 读取测试数据
+     */
+    public static int getData(Context context, int position, int defaultValue){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(PREFIX + position, defaultValue);
+    }
 }
+
+
+

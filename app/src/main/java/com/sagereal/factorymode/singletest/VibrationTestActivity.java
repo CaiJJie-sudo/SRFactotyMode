@@ -83,6 +83,6 @@ public class VibrationTestActivity extends AppCompatActivity implements View.OnC
             SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.VIBRATION_POSITION.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
-        onBackPressed();
+        finish();
     }
 }

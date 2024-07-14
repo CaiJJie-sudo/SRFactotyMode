@@ -168,12 +168,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 改变应用语言
      */
     private void switchLanguage() {
+        // 获取当前语言设置
         boolean isChinese = getResources().getConfiguration().locale.getLanguage().equals("zh");
-        Resources resources = getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        Configuration config = resources.getConfiguration();
+        Configuration config = getResources().getConfiguration();
+        // 切换语言
         config.locale = isChinese ? Locale.US : Locale.CHINESE;
-        resources.updateConfiguration(config, dm);
+        // 更新应用的 Configuration
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         recreate();
     }
+
 }
