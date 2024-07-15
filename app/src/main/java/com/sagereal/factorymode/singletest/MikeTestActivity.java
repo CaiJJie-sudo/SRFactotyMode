@@ -34,6 +34,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     private MediaPlayer mMediaPlayer;
     private String mMikeAudioFilePath; // 录音文件存放位置
     private boolean mIsRecording = false; // 是否正在录音
+    private boolean mIsPlaying = false; // 是否正在播放录音
     private boolean mPlugHeadphones = false; // 耳机插拔状态
     private BroadcastReceiver mHeadphonesBroadcastReceiver;
     private boolean mTestOver = false; // 是否测试完毕
@@ -169,6 +170,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build());
+            mIsPlaying = true;
             mMediaPlayer.start();
             mBinding.tvMikeRecordTip.setText(R.string.record_playing);
             // 播放完成
@@ -186,23 +188,31 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * 页面不可见时停止录音并恢复页面状态
+     * 页面不可见时停止录音或停止播放录音并恢复页面状态
      */
     @Override
     protected void onPause() {
         super.onPause();
         if (mIsRecording) {
-            resetUI();
-            mIsRecording = false;
             stopRecording();
+            mIsRecording = false;
+            resetUI();
+        }
+        if (mIsPlaying && mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+            mIsPlaying = false;
+            resetUI();
         }
     }
+
 
     /**
      * 重置UI和测试状态
      */
     private void resetUI() {
-        mBinding.tvMikeRecordTip.setText(R.string.mike_test_tip);
+        mBinding.tvMikeRecordTip.setVisibility(View.INVISIBLE);
         mBinding.btnMikeRecord.setText(R.string.record);
         mBinding.btnMikeRecord.setEnabled(true);
         mTestOver = false;

@@ -33,10 +33,12 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     private String mHeadphonesTestFilePath; // 录音文件存放位置
     private boolean mPlugHeadphones = false; // 耳机插拔状态
     private boolean mIsRecording = false; // 是否正在录音
+    private boolean mIsPlaying; // 是否正在播放录音
     private boolean mTestOver = false; // 是否测试完毕
 
     private BroadcastReceiver mHeadphonesBroadcastReceiver;
     private AudioManager mAudioManager;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,8 +103,8 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     private void startRecording() {
         mTestOver = false;
         mIsRecording = true;
-        mBinding.tvMikeRecordTip.setVisibility(View.VISIBLE);
-        mBinding.tvMikeRecordTip.setText(getString(R.string.recording));
+        mBinding.tvHeadphonesRecordTip.setVisibility(View.VISIBLE);
+        mBinding.tvHeadphonesRecordTip.setText(getString(R.string.recording));
         mBinding.btnHeadphonesRecord.setText(getString(R.string.testing));
         mBinding.btnHeadphonesRecord.setEnabled(false);
 
@@ -159,14 +161,14 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
                         mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
                         AudioManager.FLAG_SHOW_UI);
             }
-
+            mIsPlaying = true;
             mMediaPlayer.start();
-            mBinding.tvMikeRecordTip.setText(R.string.record_playing);
+            mBinding.tvHeadphonesRecordTip.setText(R.string.record_playing);
             // 播放完成
             mMediaPlayer.setOnCompletionListener(mp -> {
                 mMediaPlayer.release();
                 mMediaPlayer = null;
-                mBinding.tvMikeRecordTip.setText(R.string.record_test_finish);
+                mBinding.tvHeadphonesRecordTip.setText(R.string.record_test_finish);
                 mBinding.btnHeadphonesRecord.setText(R.string.retest);
                 mBinding.btnHeadphonesRecord.setEnabled(true);
                 mTestOver = true;
@@ -177,23 +179,31 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     }
 
     /**
-     * 页面不可见时停止录音并恢复页面状态
+     * 页面不可见时停止录音或停止播放录音并恢复页面状态
      */
     @Override
     protected void onPause() {
         super.onPause();
         if (mIsRecording) {
-            resetUI();
-            mIsRecording = false;
             stopRecording();
+            mIsRecording = false;
+            resetUI();
+        }
+        if (mIsPlaying && mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+            mIsPlaying = false;
+            resetUI();
         }
     }
+
 
     /**
      * 重置UI和测试状态
      */
     private void resetUI() {
-        mBinding.tvMikeRecordTip.setText(R.string.mike_test_tip);
+        mBinding.tvHeadphonesRecordTip.setVisibility(View.INVISIBLE);
         mBinding.btnHeadphonesRecord.setText(R.string.record);
         mBinding.btnHeadphonesRecord.setEnabled(true);
         mTestOver = false;

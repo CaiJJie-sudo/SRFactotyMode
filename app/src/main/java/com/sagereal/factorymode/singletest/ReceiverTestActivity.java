@@ -30,6 +30,7 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
     private MediaPlayer mMediaPlayer;
     private BroadcastReceiver mHeadphonesBroadcastReceiver;
     private boolean mPlugHeadphones = false; // 耳机插拔状态
+    private AudioManager mAudioManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +40,12 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
         registerHeadphonesReceiver();
         mBinding.btnPass.setOnClickListener(this);
         mBinding.btnFail.setOnClickListener(this);
+
+        // 获取AudioManager实例
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        // 设置音量控制流
+        setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
     }
 
     public static void openActivity(Context context) {
@@ -61,21 +68,12 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
             ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
             return;
         }
-        // 获取AudioManager实例
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null) {
-            // 设置音频路由为听筒
-            audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-            audioManager.setSpeakerphoneOn(false);
 
-            // 检查音量是否为零，如果是，设置音量为最大值的一半
-            if (audioManager != null) {
-                if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
-                            AudioManager.FLAG_SHOW_UI);
-                }
-            }
+        if (mAudioManager != null) {
+            // 设置音频路由为听筒
+            mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+            mAudioManager.setSpeakerphoneOn(false);
+
             // 创建 MediaPlayer
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
@@ -88,23 +86,15 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
                 mMediaPlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.music));
 
                 // 设置准备监听器，当MediaPlayer准备好时开始播放
-                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mp.start();
-                    }
-                });
+                mMediaPlayer.setOnPreparedListener(MediaPlayer::start);
 
                 // 异步准备MediaPlayer，这样不会阻塞主线程
                 mMediaPlayer.prepareAsync();
 
                 // 设置播放完成监听器，当MediaPlayer播放完成时恢复音频路由为默认值
-                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        audioManager.setMode(AudioManager.MODE_NORMAL);
-                        audioManager.setSpeakerphoneOn(true);
-                    }
+                mMediaPlayer.setOnCompletionListener(mp -> {
+                    mAudioManager.setMode(AudioManager.MODE_NORMAL);
+                    mAudioManager.setSpeakerphoneOn(true);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -138,11 +128,10 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
      * @return true: 有耳机 false : 无耳机
      */
     private void pluggedHeadphones() {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null && !audioManager.isWiredHeadsetOn() && mPlugHeadphones) {
+        if (mAudioManager != null && !mAudioManager.isWiredHeadsetOn() && mPlugHeadphones) {
             ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
             mPlugHeadphones = false;
-        } else if (audioManager != null && audioManager.isWiredHeadsetOn()) {
+        } else if (mAudioManager != null && mAudioManager.isWiredHeadsetOn()) {
             ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
             mPlugHeadphones = true;
         }
@@ -191,10 +180,9 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
      * 检测设备是否支持听筒
      */
     private boolean supportReceiver() {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null) {
+        if (mAudioManager != null) {
             // 获取所有输出音频设备的信息
-            AudioDeviceInfo[] devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
+            AudioDeviceInfo[] devices = mAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
             for (AudioDeviceInfo deviceInfo : devices) {
                 // 检查设备类型是否为内置听筒
                 if (deviceInfo.getType() == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE) {
