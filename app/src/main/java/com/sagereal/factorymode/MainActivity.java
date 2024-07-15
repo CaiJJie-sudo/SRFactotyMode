@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.Manifest;
 import android.widget.Toast;
@@ -29,9 +27,9 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityMainBinding binding;
-    private DeviceBasicInfoUtil deviceBasicInfoUtil;
-    private boolean doubleBackToExit = false; // 双击返回键退出程序
+    private ActivityMainBinding mBinding;
+    private DeviceBasicInfoUtil mDeviceBasicInfoUtil;
+    private boolean mDoubleBackToExit = false; // 双击返回键退出程序
 
     private static final int PERMISSIONS_REQUEST_CODE = 1; // 权限请求的代码
     private final String[] mPermissions = { // 需要请求的权限数组
@@ -43,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        deviceBasicInfoUtil = new DeviceBasicInfoUtil(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mDeviceBasicInfoUtil = new DeviceBasicInfoUtil(this);
 
-        setOnClickListeners(binding.btnCapture, binding.btnCall112, binding.btnSingleTest, binding.btnReport, binding.ibSwitchLanguage);
+        setOnClickListeners(mBinding.btnCapture, mBinding.btnCall112, mBinding.btnSingleTest, mBinding.btnReport, mBinding.ibSwitchLanguage);
 
         initHomePage();
         //检查权限是否授权
@@ -96,15 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     private void initHomePage() {
-        binding.tvDeviceName.setText(deviceBasicInfoUtil.getDeviceName());
-        binding.tvDeviceModel.setText(deviceBasicInfoUtil.getDeviceModel());
-        binding.tvDeviceVersion.setText(deviceBasicInfoUtil.getDeviceVersion());
-        binding.tvAndroidVersion.setText(deviceBasicInfoUtil.getAndroidVersion());
-        binding.tvRam.setText(deviceBasicInfoUtil.getRam() + " " + getText(R.string.g));
-        binding.tvRom.setText(deviceBasicInfoUtil.getRom() + " " + getText(R.string.gb));
-        binding.tvBatterySize.setText(deviceBasicInfoUtil.getBatterySize() + " " + getText(R.string.mAh));
-        binding.tvScreenSize.setText(deviceBasicInfoUtil.getScreenSize() + " " + getText(R.string.inch));
-        binding.tvScreenResolution.setText(deviceBasicInfoUtil.getScreenResolution() + " " + getText(R.string.pixel));
+        mBinding.tvDeviceName.setText(mDeviceBasicInfoUtil.getDeviceName());
+        mBinding.tvDeviceModel.setText(mDeviceBasicInfoUtil.getDeviceModel());
+        mBinding.tvDeviceVersion.setText(mDeviceBasicInfoUtil.getDeviceVersion());
+        mBinding.tvAndroidVersion.setText(mDeviceBasicInfoUtil.getAndroidVersion());
+        mBinding.tvRam.setText(mDeviceBasicInfoUtil.getRam() + " " + getText(R.string.g));
+        mBinding.tvRom.setText(mDeviceBasicInfoUtil.getRom() + " " + getText(R.string.gb));
+        mBinding.tvBatterySize.setText(mDeviceBasicInfoUtil.getBatterySize() + " " + getText(R.string.mAh));
+        mBinding.tvScreenSize.setText(mDeviceBasicInfoUtil.getScreenSize() + " " + getText(R.string.inch));
+        mBinding.tvScreenResolution.setText(mDeviceBasicInfoUtil.getScreenResolution() + " " + getText(R.string.pixel));
     }
 
     @Override
@@ -155,12 +153,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onBackPressed() {
-        if (doubleBackToExit) {
+        if (mDoubleBackToExit) {
             super.onBackPressed();
         } else {
-            doubleBackToExit = true;
+            mDoubleBackToExit = true;
             ToastUtils.showToast(this, getString(R.string.exit), Toast.LENGTH_SHORT);
-            new Handler().postDelayed(() -> doubleBackToExit = false, 2000);
+            new Handler().postDelayed(() -> mDoubleBackToExit = false, 2000);
         }
     }
 

@@ -3,12 +3,10 @@ package com.sagereal.factorymode.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.sagereal.factorymode.R;
-
 /**
  * 管理单项测试数据保存和读取
  */
-public class SharePreferenceUtils {
+public class SharePreferenceUtil {
     private static final String PREFS_NAME = "sr_factory_mode_shared_prefs"; // 定义 SharedPreferences 文件的名称
     private static final String PREFIX = "single_item_position_"; // 定义键值前缀
 

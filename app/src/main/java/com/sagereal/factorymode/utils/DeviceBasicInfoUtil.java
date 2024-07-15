@@ -15,42 +15,52 @@ import android.view.WindowManager;
 public class DeviceBasicInfoUtil {
     private static final double GB_TO_BYTES = 1024.0 * 1024.0 * 1024.0;
     private static final int[] ROM_MAP = new int[]{2, 4, 8, 16, 32, 64, 128, 256, 512};
-    private final String deviceName;
-    private final String deviceModel;
-    private final String deviceVersion;
-    private final String androidVersion;
-    private final int ram;
-    private final int rom;
-    private final int batterySize;
-    private final double screenSize;
-    private final String screenResolution;
+    private String mDeviceName;
+    private String mDeviceModel;
+    private String mDeviceVersion;
+    private String mAndroidVersion;
+    private int mRam;
+    private int mRom;
+    private int mBatterySize;
+    private double mScreenSize;
+    private String mScreenResolution;
+    private Context mContext;
 
     public DeviceBasicInfoUtil(Context context) {
-        this.deviceName = Build.DEVICE;
-        this.deviceModel = Build.MODEL;
-        this.deviceVersion = Build.DISPLAY;
-        this.androidVersion = Build.VERSION.RELEASE;
-        this.ram = setmDeviceRam(context);
-        this.rom = setDeviceRom();
-        this.batterySize = setBatterySize(context);
-        this.screenSize = setScreenSize(context);
-        this.screenResolution = setScreenResolution(context);
+        this.mContext = context;
     }
 
+    private String setDeviceName(){
+        this.mDeviceName = Build.DEVICE;
+        return mDeviceName;
+    }
+    private String setDeviceModel(){
+        this.mDeviceModel = Build.MODEL;
+        return mDeviceModel;
+    }
+    private String setDeviceVersion(){
+        this.mDeviceVersion = Build.DISPLAY;
+        return mDeviceVersion;
+    }
+    private String setAndroidVersion(){
+        this.mAndroidVersion = Build.VERSION.RELEASE;
+        return mAndroidVersion;
+    }
     /**
      * 获取设备的RAM并向上取整返回整型GB
      */
-    private int setmDeviceRam(Context context) {
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    private int setRam() {
+        ActivityManager activityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
         activityManager.getMemoryInfo(memoryInfo);
-        return (int) Math.ceil(memoryInfo.totalMem / GB_TO_BYTES);
+        this.mRam =  (int) Math.ceil(memoryInfo.totalMem / GB_TO_BYTES);
+        return mRam;
     }
 
     /**
      * 获取设备的ROM并向上取整返回整型GB
      */
-    private int setDeviceRom() {
+    private int setRom() {
         StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
         int totalRom = (int) Math.ceil(statFs.getTotalBytes() / GB_TO_BYTES);
         for (int i : ROM_MAP) {
@@ -59,42 +69,44 @@ public class DeviceBasicInfoUtil {
                 break;
             }
         }
-        return totalRom;
+        this.mRom = totalRom;
+        return mRom;
     }
 
     /**
      * 获取设备的电池容量
      */
-    private int setBatterySize(Context context) {
+    private int setBatterySize() {
         Object powerProfile = null;
         double batterySize = 0;
         final String POWER_PROFILE_CLASS = "com.android.internal.os.PowerProfile";
         try {
-            powerProfile = Class.forName(POWER_PROFILE_CLASS).getConstructor(Context.class).newInstance(context);
+            powerProfile = Class.forName(POWER_PROFILE_CLASS).getConstructor(Context.class).newInstance(mContext);
             batterySize = (double) Class.forName(POWER_PROFILE_CLASS).getMethod("getBatteryCapacity").invoke(powerProfile);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return (int)batterySize;
+        this.mBatterySize = (int)batterySize;
+        return mBatterySize;
     }
 
     /**
      * 获取设备的屏幕分辨率
      */
-    public static String setScreenResolution(Context context) {
-        DisplayMetrics metrics = getMetrics(context);
+    public String setScreenResolution() {
+        DisplayMetrics metrics = getMetrics(mContext);
         int widthPixels = metrics.widthPixels;
         int heightPixels = metrics.heightPixels;
 
-        return widthPixels + " x " + heightPixels;
-
+        this.mScreenResolution = widthPixels + " x " + heightPixels;
+        return mScreenResolution;
     }
 
     /**
      * 获取设备的屏幕尺寸
      */
-    public static double setScreenSize(Context context) {
-        DisplayMetrics metrics = getMetrics(context);
+    public double setScreenSize() {
+        DisplayMetrics metrics = getMetrics(mContext);
         float widthPixels = metrics.widthPixels;
         float heightPixels = metrics.heightPixels;
         float xdpi = metrics.xdpi;
@@ -106,10 +118,11 @@ public class DeviceBasicInfoUtil {
 
         // 返回对角线尺寸（保留两位小数）
         double screenSize = Math.sqrt(Math.pow(widthInches, 2) + Math.pow(heightInches, 2));
-        return Math.round(screenSize * 100.0) / 100.0;
+        this.mScreenSize = Math.round(screenSize * 100.0) / 100.0;
+        return mScreenSize;
     }
 
-    private static DisplayMetrics getMetrics(Context context) {
+    private DisplayMetrics getMetrics(Context context) {
         DisplayMetrics metrics = new DisplayMetrics();
         // 获取 WindowManager 系统服务
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -123,38 +136,38 @@ public class DeviceBasicInfoUtil {
 
 
     public String getDeviceName() {
-        return deviceName;
+        return setDeviceName();
     }
 
     public String getDeviceModel() {
-        return deviceModel;
+        return setDeviceModel();
     }
 
     public String getDeviceVersion() {
-        return deviceVersion;
+        return setDeviceVersion();
     }
 
     public String getAndroidVersion() {
-        return androidVersion;
+        return setAndroidVersion();
     }
 
     public int getRam() {
-        return ram;
+        return setRam();
     }
 
     public int getRom() {
-        return rom;
+        return setRom();
     }
 
     public int getBatterySize() {
-        return batterySize;
+        return setBatterySize();
     }
 
     public double getScreenSize() {
-        return screenSize;
+        return setScreenSize();
     }
 
     public String getScreenResolution() {
-        return screenResolution;
+        return setScreenResolution();
     }
 }

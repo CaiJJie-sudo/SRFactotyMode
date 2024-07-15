@@ -22,29 +22,29 @@ import com.sagereal.factorymode.databinding.ActivityHeadphonesTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 import java.io.IOException;
 
 public class HeadphonesTestActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityHeadphonesTestBinding binding;
-    private MediaRecorder mediaRecorder;
-    private MediaPlayer mediaPlayer;
-    private String headphonesTestFilePath; // 录音文件存放位置
-    private boolean plugHeadphones = false; // 耳机插拔状态
-    private boolean testOver = false; // 是否测试完毕
+    private ActivityHeadphonesTestBinding mBinding;
+    private MediaRecorder mMediaRecorder;
+    private MediaPlayer mMediaPlayer;
+    private String mHeadphonesTestFilePath; // 录音文件存放位置
+    private boolean mPlugHeadphones = false; // 耳机插拔状态
+    private boolean mTestOver = false; // 是否测试完毕
 
-    private BroadcastReceiver headphonesReceiver;
-    private AudioManager audioManager;
+    private BroadcastReceiver mHeadphonesBroadcastReceiver;
+    private AudioManager mAudioManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_headphones_test);
-        headphonesTestFilePath = getExternalCacheDir().getAbsolutePath() + "/headphonesTestRecording.mp4";
-        setOnClickListeners(binding.btnHeadphonesRecord, binding.btnPass, binding.btnFail);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_headphones_test);
+        mHeadphonesTestFilePath = getExternalCacheDir().getAbsolutePath() + "/headphonesTestRecording.mp4";
+        setOnClickListeners(mBinding.btnHeadphonesRecord, mBinding.btnPass, mBinding.btnFail);
 
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
     }
@@ -62,7 +62,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 监听并更改耳机插拔状态变化的广播接收器
      */
     private void registerHeadphonesReceiver() {
-        headphonesReceiver = new BroadcastReceiver() {
+        mHeadphonesBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.hasExtra("state")) {
@@ -71,7 +71,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
             }
         };
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
-        registerReceiver(headphonesReceiver, filter);
+        registerReceiver(mHeadphonesBroadcastReceiver, filter);
     }
 
     /**
@@ -79,17 +79,17 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      */
     private void checkHeadphones() {
         // 判断是否插入耳机并进行提示
-        if (audioManager != null) {
-            if (!audioManager.isWiredHeadsetOn()) {
+        if (mAudioManager != null) {
+            if (!mAudioManager.isWiredHeadsetOn()) {
                 ToastUtils.showToast(this, getString(R.string.not_plugged_headphones), Toast.LENGTH_SHORT);
-                plugHeadphones = false;
+                mPlugHeadphones = false;
                 // 若没有插入耳机且在测试中，则刷新该页面
-                if (!binding.btnHeadphonesRecord.isEnabled()) {
+                if (!mBinding.btnHeadphonesRecord.isEnabled()) {
                     recreate();
                 }
-            } else if (audioManager.isWiredHeadsetOn() && !plugHeadphones) {
+            } else if (mAudioManager.isWiredHeadsetOn() && !mPlugHeadphones) {
                 ToastUtils.showToast(this, getString(R.string.plugged_headphones), Toast.LENGTH_SHORT);
-                plugHeadphones = true;
+                mPlugHeadphones = true;
             }
         }
     }
@@ -98,21 +98,21 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 开始录音
      */
     private void startRecording() {
-        testOver = false;
-        binding.tvMikeRecordTip.setVisibility(View.VISIBLE);
-        binding.tvMikeRecordTip.setText(getString(R.string.recording));
-        binding.btnHeadphonesRecord.setText(getString(R.string.testing));
-        binding.btnHeadphonesRecord.setEnabled(false);
+        mTestOver = false;
+        mBinding.tvMikeRecordTip.setVisibility(View.VISIBLE);
+        mBinding.tvMikeRecordTip.setText(getString(R.string.recording));
+        mBinding.btnHeadphonesRecord.setText(getString(R.string.testing));
+        mBinding.btnHeadphonesRecord.setEnabled(false);
 
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(headphonesTestFilePath);
+        mMediaRecorder = new MediaRecorder();
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mMediaRecorder.setOutputFile(mHeadphonesTestFilePath);
 
         try {
-            mediaRecorder.prepare();
-            mediaRecorder.start();
+            mMediaRecorder.prepare();
+            mMediaRecorder.start();
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -129,10 +129,10 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 停止录音
      */
     private void stopRecording() {
-        if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            mediaRecorder = null;
+        if (mMediaRecorder != null) {
+            mMediaRecorder.stop();
+            mMediaRecorder.release();
+            mMediaRecorder = null;
             // 停止录音后立即播放录音
             playRecording();
         }
@@ -142,28 +142,28 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 播放录音
      */
     private void playRecording() {
-        mediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(headphonesTestFilePath);
-            mediaPlayer.prepare();
+            mMediaPlayer.setDataSource(mHeadphonesTestFilePath);
+            mMediaPlayer.prepare();
 
             // 检查音量是否为零，如果是，设置音量为最大值的一半
-            if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
+            if (mAudioManager != null && mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
                         AudioManager.FLAG_SHOW_UI);
             }
 
-            mediaPlayer.start();
-            binding.tvMikeRecordTip.setText(R.string.record_playing);
+            mMediaPlayer.start();
+            mBinding.tvMikeRecordTip.setText(R.string.record_playing);
             // 播放完成
-            mediaPlayer.setOnCompletionListener(mp -> {
-                mediaPlayer.release();
-                mediaPlayer = null;
-                binding.tvMikeRecordTip.setText(R.string.record_test_finish);
-                binding.btnHeadphonesRecord.setText(R.string.retest);
-                binding.btnHeadphonesRecord.setEnabled(true);
-                testOver = true;
+            mMediaPlayer.setOnCompletionListener(mp -> {
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+                mBinding.tvMikeRecordTip.setText(R.string.record_test_finish);
+                mBinding.btnHeadphonesRecord.setText(R.string.retest);
+                mBinding.btnHeadphonesRecord.setEnabled(true);
+                mTestOver = true;
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -174,7 +174,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     protected void onDestroy() {
         super.onDestroy();
         // 注销耳机插拔状态变化的广播接收器
-        unregisterReceiver(headphonesReceiver);
+        unregisterReceiver(mHeadphonesBroadcastReceiver);
     }
 
     /**
@@ -190,21 +190,21 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     public void onClick(View v) {
         if (v.getId() == R.id.btn_headphones_record) {  // 点击录音
             checkHeadphones();
-            if (!plugHeadphones) {
+            if (!mPlugHeadphones) {
                 return;
             }
             startRecording();
             return;
         } else if (v.getId() == R.id.btn_pass){
             // 未测试或测试中不能点击通过
-            if(!testOver) {
+            if(!mTestOver) {
                 ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             }else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_HEADPHONES.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_HEADPHONES.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_HEADPHONES.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_HEADPHONES.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

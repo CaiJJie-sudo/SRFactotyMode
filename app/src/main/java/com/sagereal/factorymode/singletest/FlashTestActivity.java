@@ -14,25 +14,27 @@ import androidx.databinding.DataBindingUtil;
 import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityFlashTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 public class FlashTestActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityFlashTestBinding binding;
-    private CameraManager cameraManager;
-    private String[] cameraId;
+    private ActivityFlashTestBinding mBinding;
+    private CameraManager mCameraManager;
+    private String[] mCameraId;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_flash_test);
-        binding.btnPass.setOnClickListener(this);
-        binding.btnFail.setOnClickListener(this);
-        cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_flash_test);
+        mBinding.btnPass.setOnClickListener(this);
+        mBinding.btnFail.setOnClickListener(this);
+        mCameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
         try {
-            cameraId = cameraManager.getCameraIdList(); // 获取所有摄像头的ID
+            mCameraId = mCameraManager.getCameraIdList(); // 获取所有摄像头的ID
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
     }
+
     public static void openActivity(Context context) {
         context.startActivity(new Intent(context, FlashTestActivity.class));
     }
@@ -42,8 +44,8 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
         try {
             // 打开所有闪光灯
-            for (String flashId : cameraId){
-                cameraManager.setTorchMode(flashId, true);
+            for (String flashId : mCameraId){
+                mCameraManager.setTorchMode(flashId, true);
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -54,9 +56,9 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     protected void onPause() {
         super.onPause();
         try {
-            for (String flashId : cameraId){
+            for (String flashId : mCameraId){
                 // 关闭闪光灯
-                cameraManager.setTorchMode(flashId, false);
+                mCameraManager.setTorchMode(flashId, false);
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -66,12 +68,11 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_pass){
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_FLASH.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_FLASH.getValue(), EnumSingleTest.TESTED_PASS.getValue());
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_FLASH.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_FLASH.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();
     }
-
 }

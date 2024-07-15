@@ -21,24 +21,24 @@ import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityReceiverTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.ToastUtils;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 import java.io.IOException;
 
 public class ReceiverTestActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityReceiverTestBinding binding;
-    private MediaPlayer mediaPlayer;
-    private BroadcastReceiver headphonesReceiver;
-    private boolean plugHeadphones = false; // 耳机插拔状态
+    private ActivityReceiverTestBinding mBinding;
+    private MediaPlayer mMediaPlayer;
+    private BroadcastReceiver mHeadphonesBroadcastReceiver;
+    private boolean mPlugHeadphones = false; // 耳机插拔状态
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_receiver_test);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_receiver_test);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
-        binding.btnPass.setOnClickListener(this);
-        binding.btnFail.setOnClickListener(this);
+        mBinding.btnPass.setOnClickListener(this);
+        mBinding.btnFail.setOnClickListener(this);
     }
 
     public static void openActivity(Context context) {
@@ -48,14 +48,11 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
     /**
      * 播放音乐
      */
-    /**
-     * 播放音乐
-     */
     private void playMusic() {
         releaseMediaPlayer();
 
         // 如果插入耳机，直接返回
-        if (plugHeadphones) {
+        if (mPlugHeadphones) {
             return;
         }
 
@@ -64,7 +61,6 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
             ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
             return;
         }
-
         // 获取AudioManager实例
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (audioManager != null) {
@@ -72,25 +68,38 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
             audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
             audioManager.setSpeakerphoneOn(false);
 
-            // 创建MediaPlayer并设置要播放的音乐文件
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+            // 检查音量是否为零，如果是，设置音量为最大值的一半
+            if (audioManager != null) {
+                if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                            audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
+                            AudioManager.FLAG_SHOW_UI);
+                }
+            }
+            // 创建 MediaPlayer
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
                     .build());
 
             try {
-                mediaPlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.music));
-                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                // 设置MediaPlayer的数据源为应用程序的资源文件中的音乐文件
+                mMediaPlayer.setDataSource(this, Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.music));
+
+                // 设置准备监听器，当MediaPlayer准备好时开始播放
+                mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         mp.start();
                     }
                 });
-                mediaPlayer.prepareAsync();
 
-                // 恢复音频路由为默认值
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                // 异步准备MediaPlayer，这样不会阻塞主线程
+                mMediaPlayer.prepareAsync();
+
+                // 设置播放完成监听器，当MediaPlayer播放完成时恢复音频路由为默认值
+                mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         audioManager.setMode(AudioManager.MODE_NORMAL);
@@ -99,22 +108,20 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
                 });
             } catch (IOException e) {
                 e.printStackTrace();
-                ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
             }
         }
     }
-
 
     /**
      * 监听并更改耳机插拔状态变化的广播接收器
      */
     private void registerHeadphonesReceiver() {
-        headphonesReceiver = new BroadcastReceiver() {
+        mHeadphonesBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.hasExtra("state")) {
                     pluggedHeadphones();
-                    if (!plugHeadphones) {
+                    if (!mPlugHeadphones) {
                         playMusic();
                     } else {
                         releaseMediaPlayer();
@@ -123,7 +130,7 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
             }
         };
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
-        registerReceiver(headphonesReceiver, filter);
+        registerReceiver(mHeadphonesBroadcastReceiver, filter);
     }
 
     /**
@@ -132,12 +139,12 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
      */
     private void pluggedHeadphones() {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null && !audioManager.isWiredHeadsetOn() && plugHeadphones) {
+        if (audioManager != null && !audioManager.isWiredHeadsetOn() && mPlugHeadphones) {
             ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
-            plugHeadphones = false;
+            mPlugHeadphones = false;
         } else if (audioManager != null && audioManager.isWiredHeadsetOn()) {
             ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
-            plugHeadphones = true;
+            mPlugHeadphones = true;
         }
     }
 
@@ -147,7 +154,11 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        if (mediaPlayer == null) {
+        // 检查设备是否支持听筒
+        if (!supportReceiver()) {
+            return;
+        }
+        if (mMediaPlayer == null) {
             playMusic();
         }
     }
@@ -163,16 +174,16 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
         super.onDestroy();
         releaseMediaPlayer();
         // 注销耳机插拔状态变化的广播接收器
-        unregisterReceiver(headphonesReceiver);
+        unregisterReceiver(mHeadphonesBroadcastReceiver);
     }
 
     /**
      * 释放MediaPlayer资源
      */
     private void releaseMediaPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
         }
     }
 
@@ -194,22 +205,21 @@ public class ReceiverTestActivity extends AppCompatActivity implements View.OnCl
         return false;
     }
 
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass) {
             pluggedHeadphones();
             // 当耳机被插入，则点击PASS时进行提示
-            if (plugHeadphones) {
+            if (mPlugHeadphones) {
                 return;
             } else if (!supportReceiver()) {
                 ToastUtils.showToast(this, getString(R.string.not_support_receiver_test), Toast.LENGTH_SHORT);
                 return;
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_RECEIVER.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_RECEIVER.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_RECEIVER.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_RECEIVER.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

@@ -50,7 +50,7 @@
     <string name="single_item_position">Single Test Item Position</string>
     <string name="battery_test_tip">Uncharged can not click the PASS</string>
     <string name="vibraion_test_tip">Vibration test, please observe whether it is normal...</string>
-    <string name="not_support_vibration">Device does not support vibration</string>
+    <string name="not_support_vibration">The Device does not support vibration</string>
     <string name="mike_test_tip">Click on the recording button first, and the recording will automatically play after 5 seconds...</string>
     <string name="record">Recording</string>
     <string name="recording"> During the recording, please speak... </string>
@@ -64,7 +64,7 @@
     <string name="speaker_test_headphones">Please remove the headphones</string>
     <string name="speaker_test_no_headphones">Headphones removed</string>
     <string name="receiver_test_tip">Receiver test, make sure the headphones is removed first, then pay attention to whether the receiver has sound...</string>
-    <string name="not_support_receiver_test">The device does not have a built-in receiver, can not click the PASS</string>
+    <string name="not_support_receiver_test">The device does not have a built-in receiver</string>
     <string name="front_camera">Front Camera</string>
     <string name="rear_camera">Rear Camera</string>
     <string name="disable_quick_clicks">Disable quick clicks</string>

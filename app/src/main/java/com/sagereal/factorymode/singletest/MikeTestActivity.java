@@ -24,28 +24,28 @@ import com.sagereal.factorymode.databinding.ActivityMikeTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.ToastUtils;
 import com.sagereal.factorymode.utils.PermissionRequestUtil;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 import java.io.IOException;
 
 public class MikeTestActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityMikeTestBinding binding;
-    private MediaRecorder mediaRecorder;
-    private MediaPlayer mediaPlayer;
-    private String mikeAudioFilePath; // 录音文件存放位置
-    private boolean plugHeadphones = false; // 耳机插拔状态
-    private BroadcastReceiver headphonesReceiver;
-    private boolean testOver = false; // 是否测试完毕
-    private AudioManager audioManager;
+    private ActivityMikeTestBinding mBinding;
+    private MediaRecorder mMediaRecorder;
+    private MediaPlayer mMediaPlayer;
+    private String mMikeAudioFilePath; // 录音文件存放位置
+    private boolean mPlugHeadphones = false; // 耳机插拔状态
+    private BroadcastReceiver mHeadphonesBroadcastReceiver;
+    private boolean mTestOver = false; // 是否测试完毕
+    private AudioManager mAudioManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_mike_test);
-        setOnClickListeners(binding.btnMikeRecord, binding.btnPass, binding.btnFail);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_mike_test);
+        setOnClickListeners(mBinding.btnMikeRecord, mBinding.btnPass, mBinding.btnFail);
 
-        mikeAudioFilePath = getExternalCacheDir().getAbsolutePath() + "/mikeTestRecording.mp4";
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mMikeAudioFilePath = getExternalCacheDir().getAbsolutePath() + "/mikeTestRecording.mp4";
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         // 注册耳机插拔状态变化的广播接收器
         registerHeadphonesReceiver();
     }
@@ -63,7 +63,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      * 监听并更改耳机插拔状态变化的广播接收器
      */
     private void registerHeadphonesReceiver() {
-        headphonesReceiver = new BroadcastReceiver() {
+        mHeadphonesBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.hasExtra("state")) {
@@ -72,25 +72,25 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
             }
         };
         IntentFilter filter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
-        registerReceiver(headphonesReceiver, filter);
+        registerReceiver(mHeadphonesBroadcastReceiver, filter);
     }
 
     /**
      * 检查耳机状态
      */
     private void checkHeadphones() {
-        if (audioManager != null) {
+        if (mAudioManager != null) {
             // 判断是否插入耳机并进行提示
-            if (audioManager.isWiredHeadsetOn()) {
+            if (mAudioManager.isWiredHeadsetOn()) {
                 ToastUtils.showToast(this, getString(R.string.speaker_test_headphones), Toast.LENGTH_SHORT);
-                plugHeadphones = true;
+                mPlugHeadphones = true;
                 // 若插入了耳机且在测试中，则刷新该页面
-                if (!binding.btnMikeRecord.isEnabled()) {
+                if (!mBinding.btnMikeRecord.isEnabled()) {
                     recreate();
                 }
-            } else if (!audioManager.isWiredHeadsetOn() && plugHeadphones) {
+            } else if (!mAudioManager.isWiredHeadsetOn() && mPlugHeadphones) {
                 ToastUtils.showToast(this, getString(R.string.speaker_test_no_headphones), Toast.LENGTH_SHORT);
-                plugHeadphones = false;
+                mPlugHeadphones = false;
             }
         }
     }
@@ -99,23 +99,23 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      * 开始录音
      */
     private void startRecording() {
-        testOver = false;
+        mTestOver = false;
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        binding.tvMikeRecordTip.setVisibility(View.VISIBLE);
-        binding.tvMikeRecordTip.setText(getString(R.string.recording));
-        binding.btnMikeRecord.setText(getString(R.string.testing));
-        binding.btnMikeRecord.setEnabled(false);
+        mBinding.tvMikeRecordTip.setVisibility(View.VISIBLE);
+        mBinding.tvMikeRecordTip.setText(getString(R.string.recording));
+        mBinding.btnMikeRecord.setText(getString(R.string.testing));
+        mBinding.btnMikeRecord.setEnabled(false);
 
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(mikeAudioFilePath);
+        mMediaRecorder = new MediaRecorder();
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mMediaRecorder.setOutputFile(mMikeAudioFilePath);
 
         try {
-            mediaRecorder.prepare();
-            mediaRecorder.start();
+            mMediaRecorder.prepare();
+            mMediaRecorder.start();
 
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -133,10 +133,10 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      * 停止录音
      */
     private void stopRecording() {
-        if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            mediaRecorder = null;
+        if (mMediaRecorder != null) {
+            mMediaRecorder.stop();
+            mMediaRecorder.release();
+            mMediaRecorder = null;
             // 停止录音后立即播放录音
             playRecording();
         }
@@ -146,33 +146,33 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      * 播放录音
      */
     private void playRecording() {
-        mediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(mikeAudioFilePath);
-            mediaPlayer.prepare();
+            mMediaPlayer.setDataSource(mMikeAudioFilePath);
+            mMediaPlayer.prepare();
 
             // 检查音量是否为零，如果是，设置音量为最大值的一半
-            if (audioManager != null && audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
+            if (mAudioManager != null && mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2,
                         AudioManager.FLAG_SHOW_UI);
             }
 
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mMediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build());
-            mediaPlayer.start();
-            binding.tvMikeRecordTip.setText(R.string.record_playing);
+            mMediaPlayer.start();
+            mBinding.tvMikeRecordTip.setText(R.string.record_playing);
             // 播放完成
-            mediaPlayer.setOnCompletionListener(mp -> {
-                mediaPlayer.release();
-                mediaPlayer = null;
-                binding.tvMikeRecordTip.setText(R.string.record_test_finish);
-                binding.btnMikeRecord.setText(R.string.retest);
-                binding.btnMikeRecord.setEnabled(true);
-                testOver = true;
+            mMediaPlayer.setOnCompletionListener(mp -> {
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+                mBinding.tvMikeRecordTip.setText(R.string.record_test_finish);
+                mBinding.btnMikeRecord.setText(R.string.retest);
+                mBinding.btnMikeRecord.setEnabled(true);
+                mTestOver = true;
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,7 +184,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     protected void onDestroy() {
         super.onDestroy();
         // 注销耳机插拔状态变化的广播接收器
-        unregisterReceiver(headphonesReceiver);
+        unregisterReceiver(mHeadphonesBroadcastReceiver);
     }
 
     /**
@@ -200,21 +200,21 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.btn_mike_record) { // 点击录音
             checkHeadphones();
-            if (plugHeadphones) {
+            if (mPlugHeadphones) {
                 return;
             }
             startRecording();
             return;
         } else if (v.getId() == R.id.btn_pass) {
             // 未测试或测试中不能点击通过
-            if (!testOver) {
+            if (!mTestOver) {
                 ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
                 return;
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) { // 点击测试失败
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();

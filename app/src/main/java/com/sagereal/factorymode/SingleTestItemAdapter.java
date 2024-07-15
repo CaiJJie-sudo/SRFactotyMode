@@ -18,15 +18,15 @@ import com.sagereal.factorymode.singletest.ReceiverTestActivity;
 import com.sagereal.factorymode.singletest.SpeakerTestActivity;
 import com.sagereal.factorymode.singletest.VibrationTestActivity;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 import java.util.List;
 
 public class SingleTestItemAdapter extends RecyclerView.Adapter<SingleTestItemAdapter.ViewHolder> {
-    private List<String> singleTestItemName; // 数据源
+    private List<String> mSingleTestItemName; // 数据源
 
     public SingleTestItemAdapter(List<String> singleTestItemName){
-        this.singleTestItemName = singleTestItemName;
+        this.mSingleTestItemName = singleTestItemName;
     }
 
     /**
@@ -60,11 +60,11 @@ public class SingleTestItemAdapter extends RecyclerView.Adapter<SingleTestItemAd
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String singleTestItem = singleTestItemName.get(position);
+        String singleTestItem = mSingleTestItemName.get(position);
         holder.bind(singleTestItem);
 
         // 测试通过显示绿色，测试失败显示红色，否则默认没有颜色
-        int singleTestStatus = SharePreferenceUtils.getData(holder.itemView.getContext(), position, EnumSingleTest.UNTESTED.getValue());
+        int singleTestStatus = SharePreferenceUtil.getData(holder.itemView.getContext(), position, EnumSingleTest.UNTESTED.getValue());
         if (singleTestStatus == EnumSingleTest.TESTED_PASS.getValue()){
             holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.green));
         } else if (singleTestStatus == EnumSingleTest.TESTED_FAIL.getValue()) {
@@ -115,6 +115,6 @@ public class SingleTestItemAdapter extends RecyclerView.Adapter<SingleTestItemAd
      */
     @Override
     public int getItemCount() {
-        return singleTestItemName.size();
+        return mSingleTestItemName.size();
     }
 }

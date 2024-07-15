@@ -65,7 +65,7 @@
     <string name="speaker_test_headphones">请移除耳机</string>
     <string name="speaker_test_no_headphones">耳机已移除</string>
     <string name="receiver_test_tip">听筒测试中，请先确保耳机已被移除，然后关注听筒是否有声音...</string>
-    <string name="not_support_receiver_test">设备未内置听筒，无法点击通过</string>
+    <string name="not_support_receiver_test">设备未内置听筒</string>
     <string name="front_camera">前摄</string>
     <string name="rear_camera">后摄</string>
     <string name="disable_quick_clicks">禁止快速点击</string>

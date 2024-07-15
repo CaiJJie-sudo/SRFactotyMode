@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SingleTestActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivitySingleTestBinding binding;
+    private ActivitySingleTestBinding mBinding;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_single_test);
-        binding.ibBack.setOnClickListener(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_single_test);
+        mBinding.ibBack.setOnClickListener(this);
     }
 
     /**
@@ -48,7 +48,7 @@ public class SingleTestActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        RecyclerView rvSingleTest = binding.rvSingleTest;
+        RecyclerView rvSingleTest = mBinding.rvSingleTest;
         SingleTestItemAdapter singleTestItemAdapter = new SingleTestItemAdapter(initSingleTestItem());
         rvSingleTest.setLayoutManager(new LinearLayoutManager(this));
         rvSingleTest.setAdapter(singleTestItemAdapter);

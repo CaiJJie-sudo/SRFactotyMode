@@ -17,19 +17,19 @@ import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityBatteryTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.ToastUtils;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 public class BatteryTestActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityBatteryTestBinding binding;
-    private boolean isReceiverRegistered = false;
+    private ActivityBatteryTestBinding mBinding;
+    private boolean mIsReceiverRegistered = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_battery_test);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_battery_test);
         initBatteryInfo(); // 初始化时获取全部电池信息
-        binding.btnPass.setOnClickListener(this);
-        binding.btnFail.setOnClickListener(this);
+        mBinding.btnPass.setOnClickListener(this);
+        mBinding.btnFail.setOnClickListener(this);
     }
 
     /**
@@ -38,9 +38,9 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        if (!isReceiverRegistered) {
+        if (!mIsReceiverRegistered) {
             registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-            isReceiverRegistered = true;
+            mIsReceiverRegistered = true;
         }
     }
 
@@ -50,9 +50,9 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onPause() {
         super.onPause();
-        if (isReceiverRegistered) {
+        if (mIsReceiverRegistered) {
             unregisterReceiver(batteryReceiver);
-            isReceiverRegistered = false;
+            mIsReceiverRegistered = false;
         }
     }
 
@@ -80,16 +80,16 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
      */
     private void initBatteryInfo() {
         chargerChange();
-        binding.tvBatteryLevel.setText(String.valueOf(batteryLevel()) + getString(R.string.battery_level_unit));
-        binding.tvBatteryTemperature.setText(String.valueOf(batteryTemperature()) + getString(R.string.temperature_unit));
+        mBinding.tvBatteryLevel.setText(String.valueOf(batteryLevel()) + getString(R.string.battery_level_unit));
+        mBinding.tvBatteryTemperature.setText(String.valueOf(batteryTemperature()) + getString(R.string.temperature_unit));
     }
 
     /**
      * 插拔充电器时更新能骤变的充电状态和电压（电量和电池温度不随着充电器的插拔而改变）
      */
     private void chargerChange() {
-        binding.tvBatteryChargeStatus.setText(batteryIsCharging() ? getString(R.string.is_charging) : getString(R.string.no_charging));
-        binding.tvBatteryVoltage.setText(String.valueOf(batteryVoltage()) + getString(R.string.voltage_unit));
+        mBinding.tvBatteryChargeStatus.setText(batteryIsCharging() ? getString(R.string.is_charging) : getString(R.string.no_charging));
+        mBinding.tvBatteryVoltage.setText(String.valueOf(batteryVoltage()) + getString(R.string.voltage_unit));
     }
 
     /**
@@ -154,11 +154,11 @@ public class BatteryTestActivity extends AppCompatActivity implements View.OnCli
             if (!batteryIsCharging()) {
                 ToastUtils.showToast(this, getString(R.string.battery_test_tip), Toast.LENGTH_SHORT);
             } else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_BATTERY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_BATTERY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
                 finish();
             }
         } else if (id == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_BATTERY.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_BATTERY.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
             finish();
         }
     }

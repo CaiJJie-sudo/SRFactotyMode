@@ -26,12 +26,11 @@
             </androidx.appcompat.widget.Toolbar>
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/lcd_layout"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <android.widget.Button
                 android:id="@+id/btn_begin"
@@ -39,7 +38,6 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginTop="300dp"
                 android:text="@string/begin"
                 android:textSize="15sp"/>
 
@@ -48,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:orientation="horizontal">
 
                 <android.widget.Button
                     android:id="@+id/btn_pass"
@@ -66,12 +65,10 @@
                     android:layout_height="50dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
                     android:text="@string/fail"
                     android:textSize="15sp"/>
             </LinearLayout>
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
-
-
 </layout>

@@ -34,7 +34,7 @@
             android:layout_weight="1">
 
             <SurfaceView
-                android:id="@+id/v_camera_test"
+                android:id="@+id/surface_view_camera_test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitCenter"/>

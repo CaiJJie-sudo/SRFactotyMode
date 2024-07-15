@@ -9,16 +9,16 @@ import androidx.databinding.DataBindingUtil;
 
 import com.sagereal.factorymode.databinding.ActivityReportBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 public class ReportActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActivityReportBinding binding;
+    private ActivityReportBinding mBinding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_report);
-        binding.ibBack.setOnClickListener(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_report);
+        mBinding.ibBack.setOnClickListener(this);
         getData();
     }
 
@@ -31,14 +31,14 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
                 getString(R.string.camera_test), getString(R.string.flash_test), getString(R.string.keys_test)};
 
         for (int i = 0; i < EnumSingleTest.SINGLE_TEST_NUM.getValue(); i++) {
-            int value = SharePreferenceUtils.getData(this, i, EnumSingleTest.UNTESTED.getValue());
+            int value = SharePreferenceUtil.getData(this, i, EnumSingleTest.UNTESTED.getValue());
 
             if (value == EnumSingleTest.TESTED_PASS.getValue()) {
-                binding.tvPass.append(singleTestName[i] + "\n\n");
+                mBinding.tvPass.append(singleTestName[i] + "\n\n");
             } else if (value == EnumSingleTest.TESTED_FAIL.getValue()) {
-                binding.tvFail.append(singleTestName[i] + "\n\n");
+                mBinding.tvFail.append(singleTestName[i] + "\n\n");
             } else if (value == EnumSingleTest.UNTESTED.getValue()) {
-                binding.tvUntested.append(singleTestName[i] + "\n\n");
+                mBinding.tvUntested.append(singleTestName[i] + "\n\n");
             }
         }
     }

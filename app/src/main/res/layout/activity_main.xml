@@ -33,7 +33,7 @@
                 android:scaleType="fitCenter"
                 android:layout_gravity="right"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/ic_switch_language"
+                android:src="@drawable/btn_switch_language"
                 android:background="@color/black"
                 />
         </androidx.appcompat.widget.Toolbar>

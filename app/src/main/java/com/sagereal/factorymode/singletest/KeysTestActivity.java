@@ -17,11 +17,11 @@ import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityKeysTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.ToastUtils;
-import com.sagereal.factorymode.utils.SharePreferenceUtils;
+import com.sagereal.factorymode.utils.SharePreferenceUtil;
 
 public class KeysTestActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ActivityKeysTestBinding binding;
+    private ActivityKeysTestBinding mBinding;
     private BroadcastReceiver powerReceiver = new BroadcastReceiver() {
         /**
          * 处理屏幕关闭广播以隐藏电源按钮。
@@ -31,7 +31,7 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                binding.btnKeyPower.setVisibility(View.INVISIBLE);
+                mBinding.btnKeyPower.setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -39,9 +39,9 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_keys_test);
-        binding.btnPass.setOnClickListener(this);
-        binding.btnFail.setOnClickListener(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_keys_test);
+        mBinding.btnPass.setOnClickListener(this);
+        mBinding.btnFail.setOnClickListener(this);
     }
 
     public static void openActivity(Context context) {
@@ -50,18 +50,15 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
 
     /**
      * 音量上和下物理按键的被按下时的处理。
-     * @param keyCode 按下的按钮的键码。
-     * @param event 描述按键事件的KeyEvent对象。
-     * @return 如果事件被处理则返回true，否则返回false。
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-                binding.btnKeyVolumeUp.setVisibility(View.INVISIBLE);
+                mBinding.btnKeyVolumeUp.setVisibility(View.INVISIBLE);
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                binding.btnKeyVolumeDown.setVisibility(View.INVISIBLE);
+                mBinding.btnKeyVolumeDown.setVisibility(View.INVISIBLE);
                 return true;
             default:
                 return super.onKeyDown(keyCode, event);
@@ -83,10 +80,11 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
      * 三个物理按键是否都已测试
      */
     private boolean allKeysTested(){
-        return binding.btnKeyVolumeUp.getVisibility() == View.INVISIBLE
-                && binding.btnKeyVolumeDown.getVisibility() == View.INVISIBLE
-                && binding.btnKeyPower.getVisibility() == View.INVISIBLE;
+        return mBinding.btnKeyVolumeUp.getVisibility() == View.INVISIBLE
+                && mBinding.btnKeyVolumeDown.getVisibility() == View.INVISIBLE
+                && mBinding.btnKeyPower.getVisibility() == View.INVISIBLE;
     }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass) {
@@ -94,10 +92,10 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
                 ToastUtils.showToast(this, getString(R.string.key_quit), Toast.LENGTH_SHORT);
                 return;
             }else {
-                SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
+                SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
             }
         } else if (v.getId() == R.id.btn_fail) {
-            SharePreferenceUtils.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
+            SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_FAIL.getValue());
         }
         // 跳转至单项测试列表页面
         finish();
