@@ -33,6 +33,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
     private MediaRecorder mMediaRecorder;
     private MediaPlayer mMediaPlayer;
     private String mMikeAudioFilePath; // 录音文件存放位置
+    private boolean mIsRecording = false; // 是否正在录音
     private boolean mPlugHeadphones = false; // 耳机插拔状态
     private BroadcastReceiver mHeadphonesBroadcastReceiver;
     private boolean mTestOver = false; // 是否测试完毕
@@ -100,6 +101,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      */
     private void startRecording() {
         mTestOver = false;
+        mIsRecording = true;
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mBinding.tvMikeRecordTip.setVisibility(View.VISIBLE);
@@ -137,7 +139,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
             mMediaRecorder.stop();
             mMediaRecorder.release();
             mMediaRecorder = null;
-            // 停止录音后立即播放录音
+            // 停止录音后播放录音
             playRecording();
         }
     }
@@ -146,6 +148,10 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
      * 播放录音
      */
     private void playRecording() {
+        // 若录音未录完中途退出，则不播放录音
+        if(!mIsRecording){
+            return;
+        }
         mMediaPlayer = new MediaPlayer();
         try {
             mMediaPlayer.setDataSource(mMikeAudioFilePath);
@@ -177,7 +183,29 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * 页面不可见时停止录音并恢复页面状态
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mIsRecording) {
+            resetUI();
+            mIsRecording = false;
+            stopRecording();
+        }
+    }
+
+    /**
+     * 重置UI和测试状态
+     */
+    private void resetUI() {
+        mBinding.tvMikeRecordTip.setText(R.string.mike_test_tip);
+        mBinding.btnMikeRecord.setText(R.string.record);
+        mBinding.btnMikeRecord.setEnabled(true);
+        mTestOver = false;
     }
 
     @Override

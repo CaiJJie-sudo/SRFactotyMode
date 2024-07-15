@@ -32,6 +32,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
     private MediaPlayer mMediaPlayer;
     private String mHeadphonesTestFilePath; // 录音文件存放位置
     private boolean mPlugHeadphones = false; // 耳机插拔状态
+    private boolean mIsRecording = false; // 是否正在录音
     private boolean mTestOver = false; // 是否测试完毕
 
     private BroadcastReceiver mHeadphonesBroadcastReceiver;
@@ -99,6 +100,7 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      */
     private void startRecording() {
         mTestOver = false;
+        mIsRecording = true;
         mBinding.tvMikeRecordTip.setVisibility(View.VISIBLE);
         mBinding.tvMikeRecordTip.setText(getString(R.string.recording));
         mBinding.btnHeadphonesRecord.setText(getString(R.string.testing));
@@ -142,6 +144,10 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
      * 播放录音
      */
     private void playRecording() {
+        // 若录音未录完中途退出，则不播放录音
+        if(!mIsRecording){
+            return;
+        }
         mMediaPlayer = new MediaPlayer();
         try {
             mMediaPlayer.setDataSource(mHeadphonesTestFilePath);
@@ -170,6 +176,28 @@ public class HeadphonesTestActivity extends AppCompatActivity implements View.On
         }
     }
 
+    /**
+     * 页面不可见时停止录音并恢复页面状态
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mIsRecording) {
+            resetUI();
+            mIsRecording = false;
+            stopRecording();
+        }
+    }
+
+    /**
+     * 重置UI和测试状态
+     */
+    private void resetUI() {
+        mBinding.tvMikeRecordTip.setText(R.string.mike_test_tip);
+        mBinding.btnHeadphonesRecord.setText(R.string.record);
+        mBinding.btnHeadphonesRecord.setEnabled(true);
+        mTestOver = false;
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
