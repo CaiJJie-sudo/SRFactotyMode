@@ -1,9 +1,5 @@
 <resources>
-<<<<<<< HEAD
     <string name="app_name">SR Factory Mode</string>
-=======
-    <string name="app_name">SR Factory Model</string>
->>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
     <string name="switch_language">Switch language</string>
     <string name="basic_info">Basic Information</string>
     <string name="device_name">Device name:</string>
@@ -77,7 +73,6 @@
     <string name="key_volume_down">Volume Down Key</string>
     <string name="key_power">Power Key</string>
     <string name="keys_test_tip">Keys test, please press the physical Volume Up Key, Volume Down Key and Power Key...</string>
-<<<<<<< HEAD
     <string name="single_flash_tip">The device is a single flash</string>
     <string name="dual_flash_tip">The Device is dual flash</string>
     <string name="plugged_headphones">The earphones have been plugged in.</string>
@@ -85,14 +80,5 @@
     <string name="plz_insert_and_test">Please insert your headphones before clicking record.</string>
     <string name="camera_cannot_pass">The test is not over yet, please revert the camera to test and click PASS.</string>
     <string name="test_unfinished">You have not finished the test yet, so you cannot click PASS.</string>
-=======
-    <string name="plugged_headphones">The earphones have been plugged in.</string>
-    <string name="not_plugged_headphones"> Please insert the headphones.</string>
-    <string name="plz_insert_and_test">Please insert your headphones before clicking record.</string>
-    <string name="cannot_pass_fail">untested or in testing cannot PASS.</string>
-    <string name="camera_cannot_pass">The test is not over yet, please revert the camera to test and click PASS.</string>
-    <string name="key_quit">You have not finished the test yet, so you cannot click PASS.</string>
-    <string name="testing_disabled_exit">Testing, can not possible to exit</string>
->>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
     <string name="untested">UNTESTED</string>
 </resources>

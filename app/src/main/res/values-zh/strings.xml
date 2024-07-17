@@ -70,11 +70,8 @@
     <string name="rear_camera">后摄</string>
     <string name="disable_quick_clicks">禁止快速点击</string>
     <string name="flash_test_tip">闪光灯测试中,请观察是否正常...</string>
-<<<<<<< HEAD
     <string name="single_flash_tip">设备为单闪光灯</string>
     <string name="dual_flash_tip">设备为双闪光灯</string>
-=======
->>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
     <string name="key_volume_up">音量上键</string>
     <string name="key_volume_down">音量下键</string>
     <string name="key_power">电源键</string>
@@ -82,15 +79,8 @@
     <string name="plugged_headphones">耳机已插入</string>
     <string name="not_plugged_headphones">请插入耳机</string>
     <string name="plz_insert_and_test">请插入耳机之后再点击录音</string>
-<<<<<<< HEAD
-    <string name="camera_cannot_pass">还未测试结束,请切换摄像头测试后点击通过</string>
     <string name="test_unfinished">您还未结束测试,不能点击通过</string>
-=======
-    <string name="cannot_pass_fail">未测试或在测试中不能通过</string>
     <string name="camera_cannot_pass">还未测试结束,请切换摄像头测试后点击通过</string>
-    <string name="key_quit">您还未结束测试,不能点击通过</string>
-    <string name="testing_disabled_exit">测试中，无法退出</string>
->>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
     <string name="untested">未测试</string>
 
 </resources>

@@ -246,11 +246,7 @@ public class MikeTestActivity extends AppCompatActivity implements View.OnClickL
         } else if (v.getId() == R.id.btn_pass) {
             // 未测试或测试中不能点击通过
             if (!mTestOver) {
-<<<<<<< HEAD
                 ToastUtils.showToast(this, getString(R.string.test_unfinished), Toast.LENGTH_SHORT);
-=======
-                ToastUtils.showToast(this, getString(R.string.cannot_pass_fail), Toast.LENGTH_SHORT);
->>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
                 return;
             } else {
                 SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_MIKE.getValue(), EnumSingleTest.TESTED_PASS.getValue());

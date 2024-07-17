@@ -89,11 +89,7 @@ public class KeysTestActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.btn_pass) {
             if(!allKeysTested()){
-<<<<<<< HEAD
                 ToastUtils.showToast(this, getString(R.string.test_unfinished), Toast.LENGTH_SHORT);
-=======
-                ToastUtils.showToast(this, getString(R.string.key_quit), Toast.LENGTH_SHORT);
->>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
                 return;
             }else {
                 SharePreferenceUtil.saveData(v.getContext(), EnumSingleTest.POSITION_KEY.getValue(), EnumSingleTest.TESTED_PASS.getValue());
