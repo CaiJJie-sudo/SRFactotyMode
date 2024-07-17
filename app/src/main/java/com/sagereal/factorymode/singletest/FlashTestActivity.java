@@ -6,7 +6,10 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.os.Bundle;
 import android.view.View;
+<<<<<<< HEAD
 import android.widget.Toast;
+=======
+>>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +19,10 @@ import com.sagereal.factorymode.R;
 import com.sagereal.factorymode.databinding.ActivityFlashTestBinding;
 import com.sagereal.factorymode.utils.EnumSingleTest;
 import com.sagereal.factorymode.utils.SharePreferenceUtil;
+<<<<<<< HEAD
 import com.sagereal.factorymode.utils.ToastUtils;
+=======
+>>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
 
 public class FlashTestActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityFlashTestBinding mBinding;
@@ -44,11 +50,14 @@ public class FlashTestActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
+<<<<<<< HEAD
         if(mCameraId.length == 1){
             ToastUtils.showToast(this, getString(R.string.single_flash_tip), Toast.LENGTH_SHORT);
         }else{
             ToastUtils.showToast(this, getString(R.string.dual_flash_tip), Toast.LENGTH_SHORT);
         }
+=======
+>>>>>>> 9f3c1ad69fd50ae07b351f4d3601d2965f149b22
         try {
             // 打开所有闪光灯
             for (String flashId : mCameraId){
